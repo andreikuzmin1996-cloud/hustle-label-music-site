@@ -4,7 +4,7 @@ on:
     branches: [main]
   workflow_dispatch:
 permissions:
-  contents: read
+  contents: write
   pages: write
   id-token: write
 concurrency:
@@ -33,8 +33,8 @@ jobs:
           import re
           pattern = r'(?s)<div class="container"><section class="feature-band">.*?</section></div>'
           s, removed = re.subn(pattern, '', s, count=1)
-          if removed != 1:
-              raise RuntimeError('Community section was not found; refusing to publish unchanged HTML')
+          if removed not in (0, 1):
+              raise RuntimeError('Unexpected number of community sections')
           if 'ТВОЯ МУЗЫКА.' in s or 'НАША КОМАНДА.' in s:
               raise RuntimeError('Community promo remains in HTML')
           # Original HTML comes from repository; never stack old injected handlers.
@@ -42,6 +42,15 @@ jobs:
           s = s.replace('</body>', '<script src="form-email.js?v=7"></script></body>')
           p.write_text(s, encoding='utf-8')
           PY
+      - name: Persist removal in repository source
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add index.html
+          if ! git diff --cached --quiet; then
+            git commit -m "Permanently remove HUSTLE community promo from index.html"
+            git push origin HEAD:main
+          fi
       - name: Upload website
         uses: actions/upload-pages-artifact@v3
         with:
