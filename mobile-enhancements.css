@@ -1,0 +1,35 @@
+/* Mobile retains the full desktop visual identity rather than a simplified layout. */
+@media (max-width: 800px) {
+  html,body{max-width:100%;overflow-x:clip}
+  .container{width:100%;max-width:100%;box-sizing:border-box}
+  .hero-inner{grid-template-columns:1fr;gap:16px}
+  .hero-graphic{height:390px;max-width:100%;overflow:visible}
+  .hero-circle{width:min(78vw,370px)}
+  .hero-symbol{max-width:min(65vw,280px)}
+  .artist-grid,.release-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .service-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .feature-symbol{display:flex;min-height:200px}
+  .team-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .team-card{min-height:420px}
+  .team-card--leader{grid-column:1/-1;max-height:540px}
+  .artist-visual img,.release-card img,.team-card img,.artist-slide img{object-fit:cover;image-rendering:auto}
+  .contact-grid{grid-template-columns:1fr}
+}
+@media (max-width:550px) {
+  .hero-inner{padding-top:45px;padding-bottom:22px}
+  .hero-graphic{height:340px!important;min-height:340px}
+  .hero-circle{width:min(79vw,340px)}
+  .hero h1{font-size:clamp(48px,12.5vw,77px);overflow-wrap:normal}
+  .buttons{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .service-grid{grid-template-columns:1fr}
+  .artist-grid,.release-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .release-card,.artist-card,.artist-slide{min-width:0}
+  .feature-symbol{display:flex;min-height:160px}
+  .team-grid{grid-template-columns:1fr}
+  .team-card,.team-card--leader{grid-column:auto;min-height:480px;max-height:none}
+  .team-card img{object-position:center 22%}
+  .form{padding:22px}
+  .field input,.field select,.field textarea{font-size:16px;max-width:100%}
+  .section-header{flex-wrap:wrap}
+  img{max-width:100%}
+}
