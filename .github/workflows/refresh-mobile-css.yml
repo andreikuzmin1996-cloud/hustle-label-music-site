@@ -3,6 +3,7 @@ on:
   push:
     paths:
       - '.github/workflows/refresh-mobile-css.yml'
+      - 'mobile-enhancements.css'
 permissions:
   contents: write
 jobs:
@@ -20,7 +21,7 @@ jobs:
           p=Path('index.html')
           s=p.read_text(encoding='utf-8')
           s=re.sub(r'<link\s+rel="stylesheet"\s+href="mobile-enhancements\.css\?v=\d+"\s*/?>', '', s)
-          s=s.replace('</head>','<link rel="stylesheet" href="mobile-enhancements.css?v=20261030-2"></head>',1)
+          s=s.replace('</head>','<link rel="stylesheet" href="mobile-enhancements.css?v=20261030-5"></head>',1)
           p.write_text(s,encoding='utf-8')
           PY
       - name: Commit updated index
