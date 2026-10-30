@@ -88,3 +88,66 @@
 .feature-band{display:none!important}
 }
 @media(max-width:390px){.hero h1{font-size:clamp(39px,11.3vw,49px)!important}.container{padding-inline:16px!important}}
+
+/* Mobile responsive refinement — 2026-10-30. Desktop remains unchanged. */
+@media (max-width:800px){
+  html{overflow-x:clip;scroll-padding-top:76px}
+  body{min-width:0;overflow-x:clip}
+  *,*::before,*::after{box-sizing:border-box}
+  .container,.navinner,.hero-inner,.section-header,.contact-grid,.channels-head,.artists-top,.team-heading{min-width:0}
+  .navinner{display:flex;justify-content:space-between;align-items:center}
+  .brand{min-width:0;max-width:calc(100% - 60px)}
+  .brandtext{font-size:clamp(12px,3.8vw,16px)!important}
+  .menu-toggle{flex:0 0 44px;min-width:44px;min-height:44px;display:grid!important;place-items:center}
+  .navlinks.open{display:flex!important;position:absolute;left:0;right:0;top:68px!important;max-height:calc(100dvh - 68px);overflow-y:auto;padding:14px 20px 23px!important;box-shadow:0 16px 25px #0002}
+  .navlinks.open a{display:block;min-height:44px;padding:13px 12px!important}
+  .hero-inner>*,.section-header>*,.contact-grid>*,.team-grid>*,.channels-grid>*{min-width:0}
+  .hero h1{font-size:clamp(38px,11vw,76px)!important}
+  .hero h1 small{letter-spacing:.12em!important;font-size:clamp(10px,2.75vw,16px)!important}
+  .hero .buttons{grid-template-columns:repeat(2,minmax(0,1fr))!important}
+  .hero .buttons .btn{white-space:normal!important;overflow-wrap:normal;line-height:1.25;gap:6px}
+  .section-header{gap:10px;align-items:start!important}
+  .section-header>div{min-width:0;flex:1}
+  .section-header h2{overflow-wrap:normal!important;word-break:normal!important}
+  #services .section-header h2{font-size:clamp(20px,5.7vw,40px)!important;white-space:nowrap!important;letter-spacing:-.085em;line-height:1.19!important}
+  #services .section-header h2 i{white-space:nowrap!important;overflow-wrap:normal!important}
+  .section-more{flex:0 0 auto;max-width:31vw;white-space:normal!important;text-align:right;line-height:1.4}
+  .service-grid,.release-grid,.steps,.channels-grid,.contact-grid{min-width:0}
+  .service-card,.channel-card,.release-card,.step,.form{min-width:0;max-width:100%}
+  .service-bottom{align-items:center;gap:10px}
+  .service-copy{min-width:0}
+  .service-copy h3{font-size:clamp(17px,4.7vw,22px)!important;line-height:1.17!important;overflow-wrap:break-word}
+  .team-card{max-width:100%}
+  .team-caption h3{font-size:clamp(23px,7vw,34px)!important;overflow-wrap:break-word}
+  .artists-topside{min-width:0;flex-wrap:wrap;gap:12px}
+  .artist-scroller{max-width:100%;min-width:0;-webkit-overflow-scrolling:touch}
+  .artist-slide{min-width:0;scroll-snap-align:start}
+  .channel-card h3{font-size:clamp(22px,6.3vw,32px)!important;overflow-wrap:break-word}
+  .channel-card-top,.channel-card-bottom{min-width:0}
+  .channel-card-bottom>*{min-width:0}
+  .contact h2{overflow-wrap:break-word;word-break:normal}
+  .form{width:100%}
+  .field input,.field textarea,.field select{max-width:100%;min-height:46px;font-size:16px!important}
+  .form button,.btn,.small-cta,.carousel-controls button,.round-arrow{touch-action:manipulation}
+  .footer-inner{flex-wrap:wrap}
+  .modal-wrap{padding:12px;overflow-y:auto;align-items:center}
+  .modal{max-width:100%;max-height:calc(100dvh - 24px);overflow-y:auto;padding:20px!important}
+}
+@media (max-width:390px){
+  .container{padding-inline:14px!important}
+  .navinner{padding-inline:14px!important}
+  .brandmark{width:31px!important;height:35px!important}
+  .brandtext{font-size:13px!important}
+  #services .section-header h2{font-size:clamp(18px,5.5vw,22px)!important}
+  .section-more{font-size:9px!important;max-width:28vw}
+  .hero h1{font-size:clamp(35px,10.9vw,44px)!important}
+  .hero .buttons .btn{font-size:10px!important;padding:10px 5px!important}
+  .artists-topside p{max-width:100%}
+  .carousel-foot{letter-spacing:0!important}
+}
+@media (max-width:340px){
+  #services .section-header{flex-wrap:wrap}
+  #services .section-header h2{font-size:19px!important}
+  #services .section-more{max-width:none;margin-top:4px;text-align:left}
+  .hero .buttons{grid-template-columns:1fr!important}
+}
