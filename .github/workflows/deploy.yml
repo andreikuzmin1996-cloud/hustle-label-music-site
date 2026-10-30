@@ -34,7 +34,13 @@ jobs:
           end = s.find("document.getElementById('copy-request').addEventListener", start)
           if start >= 0 and end > start:
               s = s[:start] + s[end:]
-          tag = '<script src="form-email.js?v=3" defer></script>'
+          # Ensure the HTML form itself does not target the unavailable old service.
+          import re
+          s = re.sub(r'https?://(?:www\\.)?formsubmit\\.co(?:/[^"\\s<>]*)?', 'https://api.web3forms.com/submit', s, flags=re.I)
+          s = s.replace('action="https://api.web3forms.com/submit"', 'action="https://api.web3forms.com/submit" method="POST"')
+          # The live site uses an absolute path for its frontend script.
+          s = re.sub(r'<script src="form-email\\.js[^"]*" defer></script>', '', s)
+          tag = '<script src="/form-email.js?v=5" defer></script>'
           if tag not in s:
               s = s.replace('</body>', tag + '</body>')
           p.write_text(s, encoding='utf-8')
