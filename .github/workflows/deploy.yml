@@ -4,12 +4,12 @@ on:
     branches: [main]
   workflow_dispatch:
 permissions:
-  contents: write
+  contents: read
   pages: write
   id-token: write
 concurrency:
   group: pages
-  cancel-in-progress: true
+  cancel-in-progress: false
 jobs:
   deploy:
     environment:
@@ -17,46 +17,23 @@ jobs:
       url: ${{ steps.deployment.outputs.page_url }}
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout
+      - name: Checkout site
         uses: actions/checkout@v4
+      - name: Validate Google Search Console verification
+        run: |
+          test -f index.html
+          test -f google0be7c91410ca3220.html
+          test -f robots.txt
+          test -f sitemap.xml
+          grep -Fx 'google-site-verification: google0be7c91410ca3220.html' google0be7c91410ca3220.html
       - name: Configure Pages
         uses: actions/configure-pages@v5
-        with:
-          enablement: true
-      - name: Integrate responsive styles and direct email submission
-        run: |
-          python3 - <<'PY'
-          from pathlib import Path
-          p = Path('index.html')
-          s = p.read_text(encoding='utf-8')
-          # Delete the entire unwanted community section from generated HTML.
-          import re
-          pattern = r'(?s)<div class="container"><section class="feature-band">.*?</section></div>'
-          s, removed = re.subn(pattern, '', s, count=1)
-          if removed not in (0, 1):
-              raise RuntimeError('Unexpected number of community sections')
-          if 'ТВОЯ МУЗЫКА.' in s or 'НАША КОМАНДА.' in s:
-              raise RuntimeError('Community promo remains in HTML')
-          # Original HTML comes from repository; never stack old injected handlers.
-          s = s.replace('</head>', '<link rel="stylesheet" href="mobile-enhancements.css?v=10"></head>')
-          s = s.replace('</body>', '<script src="form-email.js?v=7"></script></body>')
-          p.write_text(s, encoding='utf-8')
-          PY
-      - name: Persist removal in repository source
-        run: |
-          git config user.name "github-actions[bot]"
-          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add index.html
-          if ! git diff --cached --quiet; then
-            git commit -m "Permanently remove HUSTLE community promo from index.html"
-            git push origin HEAD:main
-          fi
-      - name: Upload website
+      - name: Upload complete site
         uses: actions/upload-pages-artifact@v3
         with:
           path: .
           name: pages-${{ github.run_id }}-${{ github.run_attempt }}
-      - name: Deploy website
+      - name: Deploy site
         id: deployment
         uses: actions/deploy-pages@v4
         with:
