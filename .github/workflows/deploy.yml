@@ -30,7 +30,7 @@ jobs:
           p = Path('index.html')
           s = p.read_text(encoding='utf-8')
           # Original HTML comes from repository; never stack old injected handlers.
-          s = s.replace('</head>', '<link rel="stylesheet" href="mobile-enhancements.css?v=7"></head>')
+          s = s.replace('</head>', '<link rel="stylesheet" href="mobile-enhancements.css?v=8"></head>')
           s = s.replace('</body>', '<script src="form-email.js?v=7"></script></body>')
           p.write_text(s, encoding='utf-8')
           PY
