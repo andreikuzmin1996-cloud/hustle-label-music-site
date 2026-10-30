@@ -29,7 +29,12 @@ jobs:
           from pathlib import Path
           p = Path('index.html')
           s = p.read_text(encoding='utf-8')
-          tag = '<script src="form-email.js?v=2" defer></script>'
+          # Strip the old local-only submit handler from the generated HTML.
+          start = s.find("form.addEventListener('submit',e=>")
+          end = s.find("document.getElementById('copy-request').addEventListener", start)
+          if start >= 0 and end > start:
+              s = s[:start] + s[end:]
+          tag = '<script src="form-email.js?v=3" defer></script>'
           if tag not in s:
               s = s.replace('</body>', tag + '</body>')
           p.write_text(s, encoding='utf-8')
