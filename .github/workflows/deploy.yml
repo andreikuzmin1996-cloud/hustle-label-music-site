@@ -38,9 +38,12 @@ jobs:
           import re
           s = s.replace('https://formsubmit.co/andreikuzmin1996@gmail.com', 'https://api.web3forms.com/submit')
           s = s.replace('action="https://api.web3forms.com/submit"', 'action="https://api.web3forms.com/submit" method="POST"')
+          # Explicitly reset the form URL even when the original HTML contains an old action.
+          import re
+          s = re.sub(r'(<form\\s+id="request-form")([^>]*)(>)', r'\\1 action="https://api.web3forms.com/submit" method="POST"\\3', s, count=1)
           # Replace any previously injected script tag to force a clean load.
           s = s.replace('<script src="form-email.js?v=3" defer></script>', '')
-          tag = '<script src="form-email.js?v=5" defer></script>'
+          tag = '<script src="form-email.js?v=20261030-1915" defer></script>'
           if tag not in s:
               s = s.replace('</body>', tag + '</body>')
           p.write_text(s, encoding='utf-8')
