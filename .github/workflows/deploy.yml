@@ -36,10 +36,10 @@ jobs:
               s = s[:start] + s[end:]
           # Ensure the HTML form itself does not target the unavailable old service.
           import re
-          s = re.sub(r'https?://(?:www\\.)?formsubmit\\.co(?:/[^"\\s<>]*)?', 'https://api.web3forms.com/submit', s, flags=re.I)
+          s = s.replace('https://formsubmit.co/andreikuzmin1996@gmail.com', 'https://api.web3forms.com/submit')
           s = s.replace('action="https://api.web3forms.com/submit"', 'action="https://api.web3forms.com/submit" method="POST"')
-          # The live site uses an absolute path for its frontend script.
-          s = re.sub(r'<script src="form-email\\.js[^"]*" defer></script>', '', s)
+          # Replace any previously injected script tag to force a clean load.
+          s = s.replace('<script src="form-email.js?v=3" defer></script>', '')
           tag = '<script src="form-email.js?v=5" defer></script>'
           if tag not in s:
               s = s.replace('</body>', tag + '</body>')
