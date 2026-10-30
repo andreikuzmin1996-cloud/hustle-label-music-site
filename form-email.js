@@ -9,7 +9,7 @@
   for (const [name, value] of [
     ['access_key', '18f9827c-8452-4537-83f3-a2fde5a44435'],
     ['subject', 'Новая заявка — HUSTLE LABEL MUSIC'],
-    ['redirect', 'https://andreikuzmin1996-cloud.github.io/hustle-label-music-site/thanks.html']
+    ['redirect', 'https://hustlelabel.ru/thanks.html']
   ]) {
     const input = document.createElement('input');
     input.type = 'hidden';
