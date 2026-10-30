@@ -1,0 +1,34 @@
+name: Refresh mobile stylesheet reference
+on:
+  push:
+    paths:
+      - '.github/workflows/refresh-mobile-css.yml'
+permissions:
+  contents: write
+jobs:
+  refresh:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+      - name: Update mobile CSS reference and remove duplicates
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          import re
+          p=Path('index.html')
+          s=p.read_text(encoding='utf-8')
+          s=re.sub(r'<link\s+rel="stylesheet"\s+href="mobile-enhancements\.css\?v=\d+"\s*/?>', '', s)
+          s=s.replace('</head>','<link rel="stylesheet" href="mobile-enhancements.css?v=20261030-2"></head>',1)
+          p.write_text(s,encoding='utf-8')
+          PY
+      - name: Commit updated index
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add index.html
+          if ! git diff --cached --quiet; then
+            git commit -m "Fix mobile CSS cache and duplicate imports"
+            git push
+          fi
