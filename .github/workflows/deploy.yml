@@ -46,6 +46,29 @@ jobs:
           tag = '<script src="form-email.js?v=20261030-1915" defer></script>'
           if tag not in s:
               s = s.replace('</body>', tag + '</body>')
+          # A capture-phase handler wins over any old submit code in the page.
+          guard = """<script>
+          document.addEventListener('submit',async function(e){
+            if(!e.target || e.target.id!=='request-form')return;
+            e.preventDefault();e.stopImmediatePropagation();
+            const f=e.target;
+            let st=document.getElementById('web3-status');
+            if(!st){st=document.createElement('p');st.id='web3-status';st.setAttribute('role','status');f.after(st)}
+            const b=f.querySelector('button[type=submit]');if(b)b.disabled=true;
+            st.textContent='Отправляем заявку…';
+            const data=new FormData(f);
+            data.set('access_key','18f9827c-8452-4537-83f3-a2fde5a44435');
+            data.set('subject','Новая заявка — HUSTLE LABEL MUSIC');
+            try{
+              const response=await fetch('https://api.web3forms.com/submit',{method:'POST',body:data,headers:{Accept:'application/json'}});
+              const result=await response.json();
+              if(!response.ok||!result.success)throw Error(result.message||'Заявка отклонена');
+              st.textContent='Заявка успешно отправлена!';st.style.color='#8effaf';f.reset();
+            }catch(err){st.textContent='Не удалось отправить: '+err.message;st.style.color='#ffabab'}
+            finally{if(b)b.disabled=false}
+          },true);
+          </script>"""
+          s = s.replace('</head>', guard + '</head>')
           p.write_text(s, encoding='utf-8')
           PY
       - name: Upload website
