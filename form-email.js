@@ -4,13 +4,12 @@
   const form = oldForm.cloneNode(true);
   oldForm.replaceWith(form);
   form.method = 'POST';
-  form.action = 'https://formsubmit.co/andreikuzmin1996@gmail.com';
+  form.action = 'https://api.web3forms.com/submit';
   form.setAttribute('accept-charset', 'UTF-8');
   for (const [name, value] of [
-    ['_subject', 'Новая заявка — HUSTLE LABEL MUSIC'],
-    ['_template', 'table'],
-    ['_captcha', 'true'],
-    ['_next', 'https://andreikuzmin1996-cloud.github.io/hustle-label-music-site/thanks.html']
+    ['access_key', '18f9827c-8452-4537-83f3-a2fde5a44435'],
+    ['subject', 'Новая заявка — HUSTLE LABEL MUSIC'],
+    ['redirect', 'https://andreikuzmin1996-cloud.github.io/hustle-label-music-site/thanks.html']
   ]) {
     const input = document.createElement('input');
     input.type = 'hidden';
@@ -18,6 +17,14 @@
     input.value = value;
     form.append(input);
   }
+  // Web3Forms anti-bot honeypot.
+  const botcheck = document.createElement('input');
+  botcheck.type = 'checkbox';
+  botcheck.name = 'botcheck';
+  botcheck.style.display = 'none';
+  botcheck.tabIndex = -1;
+  botcheck.setAttribute('aria-hidden', 'true');
+  form.append(botcheck);
   const btn = form.querySelector('[type="submit"]');
   if (btn) btn.textContent = 'ОТПРАВИТЬ ЗАЯВКУ ↗';
   const formHint = form.parentElement.querySelector('.hint');
