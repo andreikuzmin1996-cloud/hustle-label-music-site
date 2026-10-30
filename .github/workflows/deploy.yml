@@ -69,6 +69,24 @@ jobs:
           },true);
           </script>"""
           s = s.replace('</head>', guard + '</head>')
+          # Route every contact-form submission to the tested, isolated contact page.
+          # This takes priority even if legacy handlers exist in the original HTML.
+          route = """<script>
+          document.addEventListener('click', function(e) {
+            const button = e.target.closest('#request-form button[type="submit"], #request-form input[type="submit"]');
+            if (!button) return;
+            e.preventDefault();
+            e.stopImmediatePropagation();
+            window.location.href = '/contact.html';
+          }, true);
+          document.addEventListener('submit', function(e) {
+            if (!e.target || e.target.id !== 'request-form') return;
+            e.preventDefault();
+            e.stopImmediatePropagation();
+            window.location.href = '/contact.html';
+          }, true);
+          </script>"""
+          s = s.replace('</head>', route + '</head>')
           p.write_text(s, encoding='utf-8')
           PY
       - name: Upload website
