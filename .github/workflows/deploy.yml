@@ -40,7 +40,7 @@ jobs:
           s = s.replace('action="https://api.web3forms.com/submit"', 'action="https://api.web3forms.com/submit" method="POST"')
           # The live site uses an absolute path for its frontend script.
           s = re.sub(r'<script src="form-email\\.js[^"]*" defer></script>', '', s)
-          tag = '<script src="/form-email.js?v=5" defer></script>'
+          tag = '<script src="form-email.js?v=5" defer></script>'
           if tag not in s:
               s = s.replace('</body>', tag + '</body>')
           p.write_text(s, encoding='utf-8')
