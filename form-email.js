@@ -3,6 +3,7 @@
   if (!oldForm) return;
   const form = oldForm.cloneNode(true);
   oldForm.replaceWith(form);
+  form.removeAttribute('onsubmit');
   form.method = 'POST';
   form.action = 'https://api.web3forms.com/submit';
   form.setAttribute('accept-charset', 'UTF-8');
@@ -25,6 +26,13 @@
   botcheck.tabIndex = -1;
   botcheck.setAttribute('aria-hidden', 'true');
   form.append(botcheck);
+  form.addEventListener('submit', function(event) {
+    if (form.action.includes('formsubmit.co')) {
+      event.preventDefault();
+      form.action = 'https://api.web3forms.com/submit';
+      form.requestSubmit();
+    }
+  }, true);
   const btn = form.querySelector('[type="submit"]');
   if (btn) btn.textContent = 'ОТПРАВИТЬ ЗАЯВКУ ↗';
   const formHint = form.parentElement.querySelector('.hint');
