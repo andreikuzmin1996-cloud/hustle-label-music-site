@@ -1,4 +1,4 @@
-name: Refresh mobile stylesheet reference
+name: Embed mobile styles in live HTML
 on:
   push:
     paths:
@@ -7,29 +7,35 @@ on:
 permissions:
   contents: write
 jobs:
-  refresh:
+  embed:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
         with:
           persist-credentials: true
-      - name: Update mobile CSS reference and remove duplicates
+      - name: Inline responsive CSS and remove obsolete stylesheet links
         run: |
           python3 - <<'PY'
           from pathlib import Path
           import re
-          p=Path('index.html')
-          s=p.read_text(encoding='utf-8')
-          s=re.sub(r'<link\s+rel="stylesheet"\s+href="mobile-enhancements\.css\?v=\d+"\s*/?>', '', s)
-          s=s.replace('</head>','<link rel="stylesheet" href="mobile-enhancements.css?v=20261030-5"></head>',1)
-          p.write_text(s,encoding='utf-8')
+          html=Path('index.html')
+          s=html.read_text(encoding='utf-8')
+          css=Path('mobile-enhancements.css').read_text(encoding='utf-8')
+          s=re.sub(r'<style\s+id=["\']hustle-mobile-inline["\']>.*?</style>', '', s, flags=re.S|re.I)
+          s=re.sub(r'<link\b[^>]*\bhref=["\']mobile-enhancements\.css(?:\?[^"\']*)?["\'][^>]*>', '', s, flags=re.I)
+          patch = '\n<style id="hustle-mobile-inline">\n'+css+'\n</style>\n'
+          assert '</head>' in s
+          s=s.replace('</head>',patch+'</head>',1)
+          html.write_text(s,encoding='utf-8')
+          print('Embedded CSS bytes:',len(css),'HTML bytes:',len(s))
+          assert 'hustle-mobile-inline' in s
           PY
-      - name: Commit updated index
+      - name: Publish changed HTML
         run: |
           git config user.name 'github-actions[bot]'
           git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
           git add index.html
           if ! git diff --cached --quiet; then
-            git commit -m "Fix mobile CSS cache and duplicate imports"
+            git commit -m "Inline mobile responsive styles in published HTML"
             git push
           fi
