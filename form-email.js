@@ -26,11 +26,36 @@
   botcheck.tabIndex = -1;
   botcheck.setAttribute('aria-hidden', 'true');
   form.append(botcheck);
-  form.addEventListener('submit', function(event) {
-    if (form.action.includes('formsubmit.co')) {
-      event.preventDefault();
-      form.action = 'https://api.web3forms.com/submit';
-      form.requestSubmit();
+  // Prevent any legacy navigation and submit directly to the Web3Forms API.
+  form.addEventListener('submit', async function(event) {
+    event.preventDefault();
+    event.stopImmediatePropagation();
+    if (!form.reportValidity()) return;
+    let status = form.querySelector('#submission-status');
+    if (!status) {
+      status = document.createElement('p');
+      status.id = 'submission-status';
+      status.setAttribute('role', 'status');
+      form.append(status);
+    }
+    const button = form.querySelector('[type="submit"]');
+    if (button) button.disabled = true;
+    status.textContent = 'Отправляем заявку…';
+    try {
+      const response = await fetch('https://api.web3forms.com/submit', {
+        method: 'POST', body: new FormData(form),
+        headers: { Accept: 'application/json' }
+      });
+      const result = await response.json();
+      if (!response.ok || !result.success) throw new Error(result.message || 'Заявка не принята');
+      status.textContent = 'Заявка успешно отправлена!';
+      status.style.color = '#128340';
+      form.reset();
+    } catch (error) {
+      status.textContent = 'Не удалось отправить: ' + (error.message || 'ошибка сети');
+      status.style.color = '#cc3434';
+    } finally {
+      if (button) button.disabled = false;
     }
   }, true);
   const btn = form.querySelector('[type="submit"]');
