@@ -29,6 +29,14 @@ jobs:
           from pathlib import Path
           p = Path('index.html')
           s = p.read_text(encoding='utf-8')
+          # Delete the entire unwanted community section from generated HTML.
+          import re
+          pattern = r'<div class="container">\\s*<section class="feature-band">[\\s\\S]*?</section>\\s*</div>'
+          s, removed = re.subn(pattern, '', s, count=1)
+          if removed != 1:
+              raise RuntimeError('Community section was not found; refusing to publish unchanged HTML')
+          if 'ТВОЯ МУЗЫКА.' in s or 'НАША КОМАНДА.' in s:
+              raise RuntimeError('Community promo remains in HTML')
           # Original HTML comes from repository; never stack old injected handlers.
           s = s.replace('</head>', '<link rel="stylesheet" href="mobile-enhancements.css?v=10"></head>')
           s = s.replace('</body>', '<script src="form-email.js?v=7"></script></body>')
