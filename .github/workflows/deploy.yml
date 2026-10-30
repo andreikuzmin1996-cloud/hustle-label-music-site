@@ -31,7 +31,7 @@ jobs:
           s = p.read_text(encoding='utf-8')
           # Delete the entire unwanted community section from generated HTML.
           import re
-          pattern = r'<div class="container">\\s*<section class="feature-band">[\\s\\S]*?</section>\\s*</div>'
+          pattern = r'(?s)<div class="container"><section class="feature-band">.*?</section></div>'
           s, removed = re.subn(pattern, '', s, count=1)
           if removed != 1:
               raise RuntimeError('Community section was not found; refusing to publish unchanged HTML')
