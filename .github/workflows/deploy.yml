@@ -23,70 +23,15 @@ jobs:
         uses: actions/configure-pages@v5
         with:
           enablement: true
-      - name: Enable email form in published site
+      - name: Integrate responsive styles and direct email submission
         run: |
           python3 - <<'PY'
           from pathlib import Path
           p = Path('index.html')
           s = p.read_text(encoding='utf-8')
-          # Strip the old local-only submit handler from the generated HTML.
-          start = s.find("form.addEventListener('submit',e=>")
-          end = s.find("document.getElementById('copy-request').addEventListener", start)
-          if start >= 0 and end > start:
-              s = s[:start] + s[end:]
-          # Ensure the HTML form itself does not target the unavailable old service.
-          import re
-          s = s.replace('https://formsubmit.co/andreikuzmin1996@gmail.com', 'https://api.web3forms.com/submit')
-          s = s.replace('action="https://api.web3forms.com/submit"', 'action="https://api.web3forms.com/submit" method="POST"')
-          # Explicitly reset the form URL even when the original HTML contains an old action.
-          import re
-          s = re.sub(r'(<form\\s+id="request-form")([^>]*)(>)', r'\\1 action="https://api.web3forms.com/submit" method="POST"\\3', s, count=1)
-          # Replace any previously injected script tag to force a clean load.
-          s = s.replace('<script src="form-email.js?v=3" defer></script>', '')
-          tag = '<script src="form-email.js?v=20261030-1915" defer></script>'
-          if tag not in s:
-              s = s.replace('</body>', tag + '</body>')
-          # A capture-phase handler wins over any old submit code in the page.
-          guard = """<script>
-          document.addEventListener('submit',async function(e){
-            if(!e.target || e.target.id!=='request-form')return;
-            e.preventDefault();e.stopImmediatePropagation();
-            const f=e.target;
-            let st=document.getElementById('web3-status');
-            if(!st){st=document.createElement('p');st.id='web3-status';st.setAttribute('role','status');f.after(st)}
-            const b=f.querySelector('button[type=submit]');if(b)b.disabled=true;
-            st.textContent='Отправляем заявку…';
-            const data=new FormData(f);
-            data.set('access_key','18f9827c-8452-4537-83f3-a2fde5a44435');
-            data.set('subject','Новая заявка — HUSTLE LABEL MUSIC');
-            try{
-              const response=await fetch('https://api.web3forms.com/submit',{method:'POST',body:data,headers:{Accept:'application/json'}});
-              const result=await response.json();
-              if(!response.ok||!result.success)throw Error(result.message||'Заявка отклонена');
-              st.textContent='Заявка успешно отправлена!';st.style.color='#8effaf';f.reset();
-            }catch(err){st.textContent='Не удалось отправить: '+err.message;st.style.color='#ffabab'}
-            finally{if(b)b.disabled=false}
-          },true);
-          </script>"""
-          s = s.replace('</head>', guard + '</head>')
-          # Route every contact-form submission to the tested, isolated contact page.
-          # This takes priority even if legacy handlers exist in the original HTML.
-          route = """<script>
-          document.addEventListener('click', function(e) {
-            const button = e.target.closest('#request-form button[type="submit"], #request-form input[type="submit"]');
-            if (!button) return;
-            e.preventDefault();
-            e.stopImmediatePropagation();
-            window.location.href = '/contact.html';
-          }, true);
-          document.addEventListener('submit', function(e) {
-            if (!e.target || e.target.id !== 'request-form') return;
-            e.preventDefault();
-            e.stopImmediatePropagation();
-            window.location.href = '/contact.html';
-          }, true);
-          </script>"""
-          s = s.replace('</head>', route + '</head>')
+          # Original HTML comes from repository; never stack old injected handlers.
+          s = s.replace('</head>', '<link rel="stylesheet" href="mobile-enhancements.css?v=7"></head>')
+          s = s.replace('</body>', '<script src="form-email.js?v=7"></script></body>')
           p.write_text(s, encoding='utf-8')
           PY
       - name: Upload website
