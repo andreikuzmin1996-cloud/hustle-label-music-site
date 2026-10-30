@@ -186,3 +186,5 @@ html,body{max-width:100%;overflow-x:clip}
 .hero h1{font-size:clamp(34px,10.4vw,42px)!important}
 }
 @media(max-width:340px){:root{--mobile-edge:18px}.hero .buttons{grid-template-columns:1fr!important}#services .section-header h2{font-size:17px!important}}
+
+/* Cache bust deployment trigger 2026-10-30 v5 */
