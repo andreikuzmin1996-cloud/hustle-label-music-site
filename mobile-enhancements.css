@@ -60,3 +60,31 @@
 
 /* Remove HUSTLE / COMMUNITY promotional banner on all screen sizes. */
 .feature-band{display:none!important}
+
+/* Mobile final: remove floating labels and make hero concise */
+@media(max-width:800px){
+.navbar{height:68px!important;min-height:68px!important}
+.navinner{height:68px!important;min-height:68px!important}
+.menu-toggle{display:block!important;width:44px!important;height:44px!important;padding:7px!important;color:#191919!important;border-radius:10px!important}
+.navlinks{top:68px!important}
+.hero-inner{display:flex!important;flex-direction:column!important;align-items:stretch!important;min-height:0!important;padding:30px 0 32px!important;gap:0!important}
+.hero-inner>div:first-child{width:100%!important}
+.hero .eyebrow{font-size:9px!important;letter-spacing:.035em!important;gap:6px!important;flex-wrap:wrap!important}
+.hero-overline{margin-top:17px!important;padding:10px 0!important;font-size:8px!important;letter-spacing:.035em!important}
+.hero h1{font-size:clamp(43px,11.5vw,76px)!important;letter-spacing:-.105em!important;line-height:1!important;margin:25px 0 0!important;max-width:100%!important}
+.hero h1>span{display:block!important;white-space:nowrap!important}
+.hero h1 small{font-size:clamp(11px,3vw,17px)!important;letter-spacing:.23em!important;margin:13px 0 0 2px!important}
+.hero-lead{font-size:14px!important;line-height:1.65!important;margin:22px 0!important}
+.hero .buttons{display:grid!important;grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:9px!important}
+.hero .buttons .btn{width:100%!important;min-width:0!important;min-height:52px!important;font-size:10px!important;white-space:nowrap!important;padding:11px 6px!important}
+.hero-foot,.hero-coordinate,.hero-corner,.hero-tag,.hero-edge-label{display:none!important}
+.hero-graphic{height:230px!important;min-height:0!important;max-width:100%!important;width:100%!important;margin:26px 0 0!important;overflow:hidden!important}
+.hero-circle{width:215px!important;height:215px!important;max-width:65vw!important;max-height:65vw!important;box-shadow:inset 8px 12px 24px #fff8,0 14px 35px #2222,0 0 0 10px #ffffff8a!important}
+.hero-symbol{max-width:165px!important;max-height:195px!important;animation:none!important;filter:drop-shadow(9px 12px 9px #0002)!important}
+.section{padding-block:52px!important}.section-header h2,.artists-top h2,.team-heading h2{font-size:clamp(28px,7vw,42px)!important;line-height:1.15!important;overflow-wrap:anywhere!important}
+.service-grid{grid-template-columns:1fr!important;gap:12px!important}.service-card{min-height:0!important}.service-bottom{padding:20px!important}
+.team-grid,.channels-grid{grid-template-columns:1fr!important;gap:13px!important}
+.contact-grid{grid-template-columns:1fr!important}.field input,.field textarea,.field select{font-size:16px!important}
+.feature-band{display:none!important}
+}
+@media(max-width:390px){.hero h1{font-size:clamp(39px,11.3vw,49px)!important}.container{padding-inline:16px!important}}
