@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://hustlelabel.ru/sitemap.xml
