@@ -57,3 +57,6 @@
  .hero .buttons .btn{font-size:9px!important}
  .team-heading h2{font-size:25px!important}
 }
+
+/* Remove HUSTLE / COMMUNITY promotional banner on all screen sizes. */
+.feature-band{display:none!important}
