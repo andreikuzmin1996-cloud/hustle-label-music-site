@@ -26,6 +26,8 @@ jobs:
           test -f robots.txt
           test -f sitemap.xml
           grep -Fx 'google-site-verification: google0be7c91410ca3220.html' google0be7c91410ca3220.html
+      - name: Validate HUSTLE SCOUT page
+        run: test -s scout/index.html
       - name: Configure Pages
         uses: actions/configure-pages@v5
       - name: Upload complete site
