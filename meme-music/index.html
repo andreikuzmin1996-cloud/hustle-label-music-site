@@ -11,11 +11,14 @@
 <div class="nav" id="nav"><button data-tab="discover" class="active">🔎 Найти мемы</button><button data-tab="saved">💾 Мои мемы</button><button data-tab="studio">🎛️ Ремикс-студия</button><button data-tab="settings">⚙️ Источники</button></div>
 <section id="discover"><div class="hero"><div><h1>Лови мем, пока он свежий</h1><p class="muted">Видео из каналов, которые ты отслеживаешь, и быстрое добавление оригиналов.</p></div><button class="primary" id="addFromFeed">+ Добавить мем</button></div>
 <div class="panel" id="autoPanel">
-<div class="row between"><div><h3>🔥 Поиск вирусных мемов для ремиксов</h3><p class="hint">Собираем короткие ролики с реальными просмотрами и признаками смешной речевой фразы. Показываем только те, что прошли фильтр популярности. Источник пока один: PeerTube.</p></div><span class="pill">Реальные публикации</span></div>
+<div class="nav" style="padding:2px 0 14px"><button class="active" id="providerYoutube" type="button">▶ YouTube</button><button id="providerTiktok" type="button">♪ TikTok</button><button id="providerPeerTube" type="button">◉ Другие источники</button></div>
+<div id="providerTip" class="notice">YouTube: поиск вирусных коротких видео с настоящими просмотрами после подключения API-ключа.</div>
+<div class="row between"><div><h3>🔥 Поиск вирусных мемов для ремиксов</h3><p class="hint">Ищем популярные ролики, из которых можно нарезать необычный голос, фразу или выкрик для музыкального бита. Показываем только реальные метрики; звук нужно прослушать перед выбором.</p></div><span class="pill">Реальные публикации</span></div>
 <div class="toolbar"><select id="autoCategory" aria-label="Тематика"><option value="all">Все мемы</option><option value="voice" selected>Фразы, голоса и интервью</option><option value="russian">На русском</option><option value="animals">Животные</option></select><select id="autoDays" aria-label="Период"><option value="7">За 7 дней</option><option value="30" selected>За 30 дней</option><option value="90">За 90 дней</option></select><button class="primary" id="autoFind">Искать мемы</button></div>
 <div class="toolbar"><input id="autoQuery" placeholder="Свой запрос: например, funny interview" aria-label="Поисковая фраза"><button class="secondary small" id="autoReset">Сбросить запрос</button></div>
 <div class="hint">Отбор: до 2 минут, признаки речевого мема и подтверждённые просмотры. Порог: 5 000 просмотров либо от 1 000 с темпом от 350 просмотров в день. Скорость просмотров — средняя за время публикации, не реальный тренд роста.</div>
 </div>
+<div class="notice hidden" id="tiktokPanel"><b>Тренды TikTok</b><p class="hint">Массовый поиск всех публичных роликов по API пока не разрешён для этого проекта. Официальный TikTok Research API доступен только одобренным исследователям, а TikTok Business Discovery API требует отдельного доступа. Можно открыть официальный Creative Center, посмотреть вирусные ролики и сохранить ссылки в коллекцию.</p><div class="row"><a class="secondary small" href="https://ads.tiktok.com/business/creativecenter/inspiration/popular/pc/en" target="_blank" rel="noopener noreferrer">Видео TikTok Creative Center ↗</a><a class="secondary small" href="https://ads.tiktok.com/business/creativecenter/trends/hashtag/pc/en" target="_blank" rel="noopener noreferrer">Трендовые хештеги ↗</a><a class="secondary small" href="https://developers.tiktok.com/products/research-api/" target="_blank" rel="noopener noreferrer">Условия доступа к API ↗</a></div><p class="hint">Здесь нет автоматического импорта TikTok и выдуманных показателей. Для сохранения нажми «+ Добавить мем» и вставь ссылку.</p></div>
 <div class="row between" style="margin:22px 0 12px"><h2>Мемы, прошедшие отбор</h2><span class="sub" id="autoCount"></span></div>
 <div id="autoMessage" class="notice">Проверка популярности запустится автоматически.</div><div id="autoGrid" class="grid"></div>
 <h2 style="margin-top:28px">Другие площадки</h2>
@@ -24,7 +27,7 @@
 </section>
 <section id="saved" class="hidden"><div class="hero"><div><h1>Мои мемы</h1><p class="muted">Сохраняй смешные фразы и веди работу до публикации.</p></div><button class="primary" id="addSaved">+ Сохранить мем</button></div><div class="toolbar"><input id="memeFilter" placeholder="Поиск по названию и фразе"><select id="statusFilter"><option value="">Все этапы</option><option value="found">Найдено</option><option value="working">Делаю ремикс</option><option value="edited">Смонтировано</option><option value="published">Опубликовано</option></select></div><div id="savedGrid" class="grid"></div></section>
 <section id="studio" class="hidden"><div class="hero"><div><h1>Ремикс-студия</h1><p class="muted">Из смешной фразы — в музыкальную идею и план ролика.</p></div></div><div class="two"><div class="panel"><div class="field"><label>Выбери сохранённый мем</label><select id="studioMeme"></select></div><div class="field"><label>Музыкальный стиль</label><select id="genre"><option>Фонк</option><option>Клубный рэп</option><option>Jersey Club</option><option>Drift Phonk</option><option>Трэп</option><option>UK Garage</option><option>Бразильский фанк</option><option>Хаус</option></select></div><div class="field"><label>Темп, BPM</label><input id="bpm" type="number" min="40" max="240" value="130"></div><button class="primary" id="generate">Создать план ремикса</button><p class="hint">Генератор создаёт шаблон на основе выбранного мема. Это не AI и не генерация аудио.</p></div><div class="panel"><h3>План ремикса</h3><div id="remixOutput" class="empty">Выбери мем и нажми «Создать план ремикса».</div><div class="row"><button class="secondary hidden" id="copyPlan">Копировать</button><button class="primary hidden" id="savePlan">Сохранить идею</button></div></div></div><h2>Сохранённые идеи</h2><div id="ideasGrid" class="grid"></div></section>
-<section id="settings" class="hidden"><div class="hero"><div><h1>Источники видео</h1><p class="muted">Подключай YouTube-каналы для автоматического обновления их новых публикаций.</p></div></div><div class="two"><div class="panel"><h3>Добавить YouTube-канал</h3><p class="hint">Нужен ID канала, который начинается с UC (не @ник). RSS работает без ключа YouTube API, но не гарантирует полную историю или тренды всей платформы.</p><form id="sourceForm"><div class="field"><label>Название канала</label><input id="sourceName" required placeholder="Смешные интервью"></div><div class="field"><label>ID канала</label><input id="sourceId" required pattern="UC[A-Za-z0-9_-]{20,}" placeholder="UC..."></div><button class="primary">Подключить канал</button></form></div><div class="panel"><h3>Подключённые каналы</h3><div id="sourcesList"></div><div class="notice">TikTok, VK и Instagram: автоматический импорт из этих платформ пока не подключён. Можно добавлять ссылки на видео вручную.</div></div></div><details><summary>Как найти ID YouTube-канала?</summary><p class="hint">Открой канал YouTube → «О канале» → «Поделиться» → «Копировать ID канала» (если доступно). Либо используй ссылку вида youtube.com/channel/UC...</p></details></section>
+<section id="settings" class="hidden"><div class="hero"><div><h1>Источники видео</h1><p class="muted">Подключай YouTube-каналы для автоматического обновления их новых публикаций.</p></div></div><div class="two"><div class="panel"><h3>Добавить YouTube-канал</h3><p class="hint">Нужен ID канала, который начинается с UC (не @ник). RSS работает без ключа YouTube API, но не гарантирует полную историю или тренды всей платформы.</p><form id="sourceForm"><div class="field"><label>Название канала</label><input id="sourceName" required placeholder="Смешные интервью"></div><div class="field"><label>ID канала</label><input id="sourceId" required pattern="UC[A-Za-z0-9_-]{20,}" placeholder="UC..."></div><button class="primary">Подключить канал</button></form></div><div class="panel"><h3>Подключённые каналы</h3><div id="sourcesList"></div><div class="notice">YouTube: массовый поиск через официальный API готов, но нужен ключ YOUTUBE_API_KEY в Supabase Secrets. TikTok: для коммерческого автоматического поиска требуется специальный доступ к API. Сейчас доступны Creative Center и ручное сохранение ссылок.</div></div></div><details><summary>Как найти ID YouTube-канала?</summary><p class="hint">Открой канал YouTube → «О канале» → «Поделиться» → «Копировать ID канала» (если доступно). Либо используй ссылку вида youtube.com/channel/UC...</p></details></section>
 </main><footer class="footer">МЕМ → МУЗЫКА · Источники и права на исходные видео принадлежат их авторам. Для публикации сэмплов проверяй права на использование оригинального аудио.</footer>
 </div><dialog id="memeDialog" style="background:#161e2b;color:#f1f6ff;border:1px solid #3a4d5c;border-radius:18px;width:min(560px,94vw);max-height:90vh;overflow:auto"><h2 id="dialogTitle">Сохранить мем</h2><form id="memeForm"><input type="hidden" id="editId"><div class="field"><label>Название</label><input id="mTitle" maxlength="240" required placeholder="Например: смешной ответ на интервью"></div><div class="field"><label>Ссылка на оригинальное видео</label><input id="mUrl" type="url" maxlength="2048" required placeholder="https://..."></div><div class="field"><label>Ключевая фраза из мема</label><input id="mPhrase" placeholder="Какие слова будем сэмплировать?"></div><div class="field"><label>Почему это смешно / как обыграть?</label><textarea id="mNotes"></textarea></div><div class="field"><label>Этап работы</label><select id="mStatus"><option value="found">Найдено</option><option value="working">Делаю ремикс</option><option value="edited">Смонтировано</option><option value="published">Опубликовано</option></select></div><div class="row between"><button type="button" class="secondary" id="closeDialog">Отмена</button><button type="submit" class="primary">Сохранить</button></div></form></dialog>
 <script type="module">
@@ -44,38 +47,62 @@ function renderStudioSelect(){const prev=el('studioMeme').value;el('studioMeme')
 function renderIdeas(){el('ideasGrid').innerHTML=ideas.map(i=>'<div class="card"><b>'+escapeHtml(i.title)+'</b><div class="stats"><span class="tag">'+escapeHtml(i.genre)+'</span><span class="tag">'+escapeHtml(i.bpm)+' BPM</span></div><div class="hint">'+escapeHtml(i.sample_plan)+'</div><div class="row"><button class="secondary small" data-idea-copy="'+i.id+'">Копировать</button><button class="danger small" data-idea-delete="'+i.id+'">Удалить</button></div></div>').join('')||'<div class="panel empty">Сохранённых идей ещё нет.</div>'}
 async function refreshFeed(){const message=el('feedMessage'),grid=el('feedGrid');grid.innerHTML='';feed=[];if(!sources.length){message.textContent='Добавь YouTube-канал в разделе «Источники», чтобы получать свежие видео. Или добавляй мемы вручную.';return}message.textContent='Получаем реальные публикации из YouTube RSS...';const results=await Promise.all(sources.filter(s=>s.enabled&&s.channel_id).slice(0,15).map(async s=>{try{const r=await fetch('https://ysjupnwvzbnvjtcqlcnb.supabase.co/functions/v1/meme-music?channel='+encodeURIComponent(s.channel_id));const x=await r.json();if(!r.ok)throw Error(x.error||r.status);return (x.items||[]).map(item=>({...item,channel_name:s.name}))}catch(e){return [{error:s.name+': '+e.message}]}}));const errors=results.flat().filter(x=>x.error);feed=results.flat().filter(x=>x.video_id).sort((a,b)=>new Date(b.published)-new Date(a.published)).slice(0,80);message.textContent=feed.length?'Найдено видео: '+feed.length+'. Это последние публикации выбранных каналов, а не рейтинг трендов всего YouTube.':'Новых доступных видео пока нет.';if(errors.length)message.textContent+=' Ошибки источников: '+errors.map(x=>x.error).join('; ');
 grid.innerHTML=feed.map((f,i)=>'<div class="card"><div class="thumb"><img loading="lazy" alt="" src="https://i.ytimg.com/vi/'+encodeURIComponent(f.video_id)+'/hqdefault.jpg"></div><a class="titlelink" href="'+escapeHtml(f.url)+'" target="_blank" rel="noopener noreferrer">'+escapeHtml(f.title)+' ↗</a><div class="hint">'+escapeHtml(f.channel_name)+' · '+escapeHtml((f.published||'').slice(0,10))+'</div><div class="row"><button class="primary small" data-feed-save="'+i+'">Сохранить мем</button><button class="secondary small" data-feed-watch="'+i+'">Смотреть</button></div><div id="player'+i+'"></div></div>').join('')}
-let autoItems=[],autoLoaded=false,autoBusy=false;
+let autoItems=[],autoLoaded=false,autoBusy=false,autoProvider='youtube';
 const autoEndpoint='https://ysjupnwvzbnvjtcqlcnb.supabase.co/functions/v1/meme-music';
 function durationLabel(n){if(!n)return 'Длительность неизвестна';return Math.floor(n/60)+':'+String(Math.floor(n%60)).padStart(2,'0')}
+function providerSelect(kind){
+autoProvider=kind;
+for(const [p,id] of [['youtube','providerYoutube'],['tiktok','providerTiktok'],['peertube','providerPeerTube']])el(id).classList.toggle('active',p===kind);
+el('tiktokPanel').classList.toggle('hidden',kind!=='tiktok');
+el('autoCategory').disabled=kind==='tiktok';el('autoDays').disabled=kind==='tiktok';el('autoFind').disabled=kind==='tiktok';el('autoQuery').disabled=kind==='tiktok';el('autoReset').disabled=kind==='tiktok';
+el('autoGrid').innerHTML='';el('autoCount').textContent='';autoItems=[];
+if(kind==='tiktok'){el('providerTip').textContent='TikTok — доступ к официальным трендам вручную через Creative Center. Автоматический сбор пока не подключён.';el('autoMessage').textContent='Автоматический поиск TikTok пока не подключён: у сервиса нет разрешённого API-доступа.';return}
+el('providerTip').textContent=kind==='youtube'?'YouTube — поиск коротких видео и реальная статистика через официальный API. Нужен серверный API-ключ.':'Дополнительный источник PeerTube — открытый каталог; вирусность оцениваем по известным просмотрам.';
+searchAuto();
+}
 function renderAuto(){
-  el('autoCount').textContent=autoItems.length?'Видео: '+autoItems.length:'';
-  el('autoGrid').innerHTML=autoItems.map((v,i)=>'<article class="card">'+
-  (v.thumbnail?'<div class="thumb"><img loading="lazy" src="'+escapeHtml(v.thumbnail)+'" alt="Превью видеоролика"></div>':'<div class="thumb"><span class="muted">Видеопревью недоступно</span></div>')+
-  '<a class="titlelink" target="_blank" rel="noopener noreferrer" href="'+escapeHtml(v.url)+'">'+escapeHtml(v.title)+' ↗</a>'+
-  '<div class="hint">'+escapeHtml(v.source)+' · '+escapeHtml((v.published||'').slice(0,10))+' · '+escapeHtml(durationLabel(v.duration))+'</div>'+
-  '<div class="stats"><span class="tag">👁 '+Number(v.views).toLocaleString('ru-RU')+' просмотров</span><span class="tag">≈ '+Number(v.view_velocity).toLocaleString('ru-RU')+' / день</span><span class="tag">Музыкальный потенциал: '+v.remix_score+'/100*</span></div>'+
-  '<div class="row"><button class="primary small" data-auto-save="'+i+'">Сохранить для ремикса</button><a class="secondary small" href="'+escapeHtml(v.url)+'" target="_blank" rel="noopener noreferrer" style="text-decoration:none">Смотреть оригинал ↗</a></div></article>').join('');
+el('autoCount').textContent=autoItems.length?'Видео: '+autoItems.length:'';
+el('autoGrid').innerHTML=autoItems.map((v,i)=>'<article class="card">'+
+(v.thumbnail?'<div class="thumb"><img loading="lazy" src="'+escapeHtml(v.thumbnail)+'" alt="Превью видеоролика"></div>':'<div class="thumb"><span class="muted">Превью недоступно</span></div>')+
+'<a class="titlelink" target="_blank" rel="noopener noreferrer" href="'+escapeHtml(v.url)+'">'+escapeHtml(v.title)+' ↗</a>'+
+'<div class="hint">'+escapeHtml(v.platform||autoProvider)+' · '+escapeHtml(v.source)+' · '+escapeHtml((v.published||'').slice(0,10))+' · '+escapeHtml(durationLabel(v.duration))+'</div>'+
+'<div class="stats"><span class="tag">👁 '+Number(v.views).toLocaleString('ru-RU')+' просмотров</span><span class="tag">≈ '+Number(v.view_velocity).toLocaleString('ru-RU')+' / день</span><span class="tag">Потенциал: '+v.remix_score+'/100*</span></div>'+
+'<div class="row"><button class="primary small" data-auto-save="'+i+'">Сохранить для ремикса</button><a class="secondary small" href="'+escapeHtml(v.url)+'" target="_blank" rel="noopener noreferrer" style="text-decoration:none">Оригинал ↗</a></div></article>').join('');
 }
 async function searchAuto(){
- if(autoBusy)return;
- autoBusy=true;const button=el('autoFind');button.disabled=true;el('autoMessage').classList.remove('hidden');
- el('autoMessage').textContent='Ищем реальные видео. Это может занять несколько секунд...';
- const params=new URLSearchParams({discover:'1',category:el('autoCategory').value,days:el('autoDays').value});
- const q=el('autoQuery').value.trim();if(q)params.set('q',q);
- try{
-  const r=await fetch(autoEndpoint+'?'+params.toString(),{signal:AbortSignal.timeout(30000)});
-  const data=await r.json();if(!r.ok)throw new Error(data.error||'HTTP '+r.status);
-  autoItems=data.items||[];autoLoaded=true;renderAuto();
-  el('autoMessage').textContent=autoItems.length?'Прошло проверку: '+autoItems.length+' из '+data.checked+' кандидатов. Данные PeerTube, проверено '+new Date(data.updated_at).toLocaleString('ru-RU')+'. *Музыкальный потенциал оценён по названию и длительности, а не по анализу аудио.':'Проверено '+data.checked+' кандидатов, но ни один не прошёл фильтры популярности и речевого мема. Попробуй другой период или запрос. Нет подтверждённых вирусных мемов — нет карточек.';
- }catch(e){autoItems=[];renderAuto();el('autoMessage').textContent='Не удалось загрузить новые видео: '+e.message+'. Попробуй обновить позже или используй поиск ниже.';}
- finally{autoBusy=false;button.disabled=false}
+if(autoBusy||autoProvider==='tiktok')return;
+autoBusy=true;el('autoFind').disabled=true;el('autoMessage').textContent='Получаем настоящие данные из источника...';
+const providerAtStart=autoProvider;
+const params=new URLSearchParams({[providerAtStart==='youtube'?'youtube':'discover']:'1',category:el('autoCategory').value,days:el('autoDays').value});
+const query=el('autoQuery').value.trim();if(query)params.set('q',query);
+try{
+const res=await fetch(autoEndpoint+'?'+params.toString(),{signal:AbortSignal.timeout(35000)});
+const data=await res.json();
+if(providerAtStart!==autoProvider)return;
+if(!res.ok){
+ if(data.code==='API_KEY_REQUIRED'){
+   autoItems=[];renderAuto();
+   el('autoMessage').innerHTML='Для YouTube нужен API-ключ. <a href="https://console.cloud.google.com/apis/library/youtube.googleapis.com" target="_blank" rel="noopener noreferrer">Активировать YouTube Data API ↗</a>. Затем добавь ключ в Supabase Secrets под именем <b>YOUTUBE_API_KEY</b>. Не вставляй ключ в страницу или переписку.';
+   return;
+ }
+ throw new Error(data.error||'HTTP '+res.status);
 }
+autoItems=data.items||[];autoLoaded=true;renderAuto();
+el('autoMessage').textContent=autoItems.length?
+'Найдено '+autoItems.length+' из '+data.checked+' проверенных видео ('+data.provider+'). Проверено '+new Date(data.updated_at).toLocaleString('ru-RU')+'. *Потенциал оценён по метаданным, звук не анализировался.':
+'Проверено '+data.checked+' видео — ни одно не прошло фильтры популярности и пригодности. Попробуй другой запрос или период.';
+}catch(e){autoItems=[];renderAuto();el('autoMessage').textContent='Источник не ответил: '+e.message+'. Попробуй позже.'}
+finally{autoBusy=false;if(autoProvider!=='tiktok')el('autoFind').disabled=false}
+}
+el('providerYoutube').onclick=()=>providerSelect('youtube');
+el('providerTiktok').onclick=()=>providerSelect('tiktok');
+el('providerPeerTube').onclick=()=>providerSelect('peertube');
 el('autoFind').onclick=searchAuto;
 el('autoReset').onclick=()=>{el('autoQuery').value='';searchAuto()};
 el('autoCategory').onchange=searchAuto;el('autoDays').onchange=searchAuto;
 el('autoQuery').onkeydown=e=>{if(e.key==='Enter'){e.preventDefault();searchAuto()}};
-window.setInterval(()=>{if(user&&!el('discover').classList.contains('hidden'))searchAuto()},15*60*1000);
-el('autoGrid').onclick=e=>{const b=e.target.closest('button[data-auto-save]');if(!b)return;const v=autoItems[Number(b.dataset.autoSave)];if(v)showDialog({title:v.title,original_url:v.url,notes:'Источник: '+v.source+'\nПодтверждено просмотров на момент поиска: '+v.views+'\nСкорость: примерно '+v.view_velocity+' просмотров/день\nСначала прослушай звук и уточни пригодную для сэмпла фразу.'})};
+window.setInterval(()=>{if(user&&!el('discover').classList.contains('hidden')&&autoProvider!=='tiktok')searchAuto()},15*60*1000);
+el('autoGrid').onclick=e=>{const b=e.target.closest('button[data-auto-save]');if(!b)return;const v=autoItems[Number(b.dataset.autoSave)];if(v)showDialog({title:v.title,original_url:v.url,notes:'Источник: '+v.source+'\nПросмотры: '+v.views+'\nСреднее просмотров/день: '+v.view_velocity+'\nПроверь оригинальный звук и извлеки короткую фразу для бита.'})};
 function showTab(id){for(let section of ['discover','saved','studio','settings'])el(section).classList.toggle('hidden',section!==id);document.querySelectorAll('#nav button').forEach(b=>b.classList.toggle('active',b.dataset.tab===id))}
 function showDialog(m={}){el('editId').value=m.id||'';el('dialogTitle').textContent=m.id?'Изменить мем':'Сохранить мем';el('mTitle').value=m.title||'';el('mUrl').value=m.original_url||'';el('mPhrase').value=m.phrase||'';el('mNotes').value=m.notes||'';el('mStatus').value=m.status||'found';el('memeDialog').showModal()}
 async function saveMeme(e){e.preventDefault();const id=el('editId').value,url=el('mUrl').value.trim(),data={title:el('mTitle').value.trim(),original_url:url,phrase:el('mPhrase').value.trim(),notes:el('mNotes').value.trim(),status:el('mStatus').value,source:getPlatform(url),video_id:ytId(url)};const r=id?await supabase.from('memes').update(data).eq('id',id):await supabase.from('memes').insert({...data,user_id:user.id});if(r.error)return notify(r.error.message,true);el('memeDialog').close();notify('Мем сохранён');await fetchData()}
