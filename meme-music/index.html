@@ -3,6 +3,32 @@
 <title>МЕМ → МУЗЫКА — студия музыкальных мемов</title>
 <style>
 :root{font-family:Inter,system-ui,-apple-system,"Segoe UI",Arial,sans-serif;color:#eaf0f7;background:#0c1018;font-synthesis:none}*{box-sizing:border-box}body{margin:0}button,input,select,textarea{font:inherit}button{cursor:pointer}a{color:#9eead7}.wrap{max-width:1180px;margin:auto;padding:24px}.head{display:flex;align-items:center;justify-content:space-between;gap:15px;flex-wrap:wrap;padding:18px 0}.logo{font-size:22px;font-weight:900;letter-spacing:-.7px}.logo b{color:#83efc0}.sub{color:#9aa8bb;font-size:13px}.pill{font-size:12px;border:1px solid #334051;border-radius:50px;padding:7px 11px;color:#9acfb9}h1{font-size:clamp(27px,4vw,43px);letter-spacing:-1.4px;margin:13px 0}h2{font-size:22px}h3{margin:5px 0 10px;font-size:17px}.muted{color:#9aa8bb}.panel,.card{background:#161e2b;border:1px solid #293445;border-radius:18px;padding:20px}.card{display:flex;flex-direction:column;gap:10px;min-width:0}.nav{display:flex;gap:8px;overflow-x:auto;padding:10px 0 25px}.nav button,.secondary{background:#1b2532;border:1px solid #344254;color:#e6edf7;border-radius:11px;padding:11px 15px}.nav button.active{background:#b5f5ce;color:#0b2118;border-color:#b5f5ce;font-weight:800}.primary{background:#b5f5ce;color:#082518;border:0;border-radius:11px;padding:12px 17px;font-weight:800}.danger{background:#412431;color:#ffd7df;border:1px solid #774250;border-radius:11px;padding:10px}.small{font-size:13px;padding:8px 11px}.row{display:flex;align-items:center;gap:10px;flex-wrap:wrap}.between{justify-content:space-between}.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:15px}.two{display:grid;grid-template-columns:1fr 1fr;gap:15px}.field{display:flex;flex-direction:column;gap:7px;margin:10px 0}input,select,textarea{border:1px solid #344254;background:#0e1520;color:#f1f6ff;border-radius:10px;padding:11px;width:100%}textarea{min-height:100px;resize:vertical}label{font-size:13px;color:#c4ceda}button:disabled{opacity:.5;cursor:not-allowed}.notice{padding:12px 14px;background:#213142;border:1px solid #3d5365;border-radius:12px;margin:14px 0;color:#d4e6ef}.success{border-color:#2e6e55;color:#b1eed5}.error{border-color:#a84f66;color:#ffbfcf}.hidden{display:none!important}.thumb{aspect-ratio:16/9;background:#0a111a;border-radius:11px;overflow:hidden;display:flex;align-items:center;justify-content:center}.thumb img{width:100%;height:100%;object-fit:cover}.titlelink{color:#f7fbff;text-decoration:none;font-weight:700;overflow-wrap:anywhere}.tag{font-size:11px;padding:5px 8px;border-radius:7px;background:#283545;color:#bcd1df}.stats{display:flex;gap:6px;flex-wrap:wrap}.hero{display:flex;justify-content:space-between;align-items:center;gap:15px;flex-wrap:wrap;padding:12px 0 15px}.empty{text-align:center;padding:40px 18px;color:#9eafc1}.hint{font-size:13px;line-height:1.5;color:#9eafc1}.toolbar{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin:14px 0}.toolbar input{flex:1;min-width:190px}.toolbar select{width:auto}.auth{max-width:430px;margin:5vh auto}.auth h1{font-size:32px}.footer{padding:35px 0;color:#718096;font-size:12px}iframe{width:100%;aspect-ratio:16/9;border:0;border-radius:10px}.loading{opacity:.6;pointer-events:none}details{border:1px solid #334254;border-radius:12px;padding:12px;margin:12px 0}summary{cursor:pointer;font-weight:700}@media(max-width:680px){.wrap{padding:14px}.two{grid-template-columns:1fr}.panel,.card{padding:15px}.nav button{white-space:nowrap}}
+
+/* HUSTLE MEME RADAR — UI 2.0 */
+:root{--accent:#a8ffce;--glass:#111925;--line:#263344}
+body{background:radial-gradient(ellipse 900px 460px at 88% 0%,#15302b 0%,transparent 70%),#0b1018}
+.wrap{max-width:1320px}.head{border-bottom:1px solid #233140;margin-bottom:18px}
+.logo{letter-spacing:-.9px}.panel,.card{background:linear-gradient(155deg,#161f2c,#101823);box-shadow:0 8px 26px #00000017}
+.nav{gap:10px}.nav button{transition:.2s;border-radius:12px}.nav button:hover,.secondary:hover{border-color:#73cba7}
+.primary:hover{background:#d1ffe1}.card{transition:transform .15s,border-color .15s}.card:hover{border-color:#4a7668;transform:translateY(-2px)}
+.radar-head{display:flex;justify-content:space-between;gap:16px;align-items:center;flex-wrap:wrap}.radar-head h2{font-size:24px;margin:0}.radar-mark{font-size:11px;letter-spacing:1.7px;color:#8de2bd;font-weight:800}
+.radar-dashboard{margin-bottom:16px;border:1px solid #2d4c46;padding:20px;background:linear-gradient(125deg,#172b2a,#101723 68%);border-radius:20px}
+.radar-kpis{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px;margin:18px 0}
+.radar-kpi{padding:15px;background:#0d1821;border:1px solid #2a3a43;border-radius:13px}.radar-kpi b{font-size:27px;display:block;line-height:1.2}.radar-kpi span{color:#9baabd;font-size:12px}
+.radar-search{display:grid;grid-template-columns:1fr auto;gap:9px;margin:13px 0}
+.radar-chips{display:flex;flex-wrap:wrap;gap:7px}.radar-chip{background:#1a2c35;border:1px solid #34514f;color:#ccebe0;border-radius:24px;padding:7px 11px;font-size:12px}
+.radar-chip:hover{background:#27443c}.radar-tools{display:flex;gap:9px;flex-wrap:wrap;align-items:center;margin:10px 0 17px}.radar-tools select{width:auto;max-width:100%}
+.radar-video{position:relative}.radar-video .thumb{aspect-ratio:16/9;overflow:hidden}.radar-video .thumb img{transition:transform .25s}.radar-video:hover img{transform:scale(1.04)}
+.radar-video .play-overlay{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);border:1px solid #b0ffdc90;border-radius:50%;background:#08121edc;width:52px;height:52px;color:white;font-size:21px;display:grid;place-items:center}
+.radar-score{border:1px solid #3c765a;background:#142d25;border-radius:11px;padding:6px 9px;color:#b6ffcf;font-weight:800;white-space:nowrap}
+.radar-title{font-size:15px;line-height:1.4;min-height:40px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.radar-card .stats{gap:7px}.radar-card .tag{background:#253340}.radar-card .row{margin-top:auto}.radar-card .row button{flex:1}
+.radar-empty{padding:32px 18px;text-align:center;border:1px dashed #395360;border-radius:15px;color:#9bb2bf}
+.radar-note{font-size:12px;color:#90a5b3;margin-top:8px;line-height:1.6}
+.radar-inline{background:#0b1119;border-radius:10px;overflow:hidden;aspect-ratio:16/9}
+.radar-inline iframe{width:100%;height:100%;border:0;display:block}
+#autoPanel{padding:16px 20px}#autoPanel .hint{max-width:840px}
+@media(max-width:760px){.radar-kpis{grid-template-columns:repeat(2,1fr)}.radar-search{grid-template-columns:1fr}.radar-dashboard{padding:15px}.radar-tools{align-items:stretch}.radar-tools select{flex:1}.radar-head h2{font-size:21px}.radar-kpi b{font-size:23px}}
 </style></head><body><div class="wrap">
 <header class="head"><div><div class="logo">МЕМ <b>→</b> МУЗЫКА</div><div class="sub">Находи смешные звуки. Превращай их в треки.</div></div><div class="row"><span class="pill" id="connection">Загрузка...</span><button class="secondary small hidden" id="logout">Выйти</button></div></header>
 <div id="flash"></div>
@@ -10,6 +36,13 @@
 <main id="app" class="hidden">
 <div class="nav" id="nav"><button data-tab="discover" class="active">🔎 Найти мемы</button><button data-tab="saved">💾 Мои мемы</button><button data-tab="studio">🎛️ Ремикс-студия</button><button data-tab="settings">⚙️ Источники</button></div>
 <section id="discover"><div class="hero"><div><h1>Лови мем, пока он свежий</h1><p class="muted">Видео из каналов, которые ты отслеживаешь, и быстрое добавление оригиналов.</p></div><button class="primary" id="addFromFeed">+ Добавить мем</button></div>
+
+<div class="radar-dashboard">
+ <div class="radar-head"><div><div class="radar-mark">HUSTLE LABEL · CREATOR TOOLS</div><h2>MEME RADAR <span style="color:#a8ffce">2.0</span></h2><p class="hint" style="margin:5px 0 0">Находи вирусные ролики, слушай оригинал и забирай идеи для ремиксов.</p></div><span class="pill" id="radarState">● Источник проверяется</span></div>
+ <div class="radar-kpis"><div class="radar-kpi"><b id="radarFound">—</b><span>Найдено роликов</span></div><div class="radar-kpi"><b id="radarHot">—</b><span>Потенциал 75+</span></div><div class="radar-kpi"><b id="radarSaved">—</b><span>Мои мемы</span></div><div class="radar-kpi"><b id="radarBest">—</b><span>Лучший потенциал</span></div></div>
+ <label for="radarQuery" style="display:block;font-weight:700;margin-bottom:6px">Что ищем?</label><div class="radar-search"><input id="radarQuery" placeholder="Например: смешной ответ, крик, фраза из интервью"><button class="primary" id="radarSearch" type="button">⌕ Найти мемы</button></div>
+ <div class="radar-chips"><button type="button" class="radar-chip" data-radar-query="смешное интервью">🎤 Интервью</button><button type="button" class="radar-chip" data-radar-query="смешной крик реакция">😱 Реакции</button><button type="button" class="radar-chip" data-radar-query="прикол смешной диалог">💬 Диалоги</button><button type="button" class="radar-chip" data-radar-query="мем смешная фраза">😂 Фразы</button><button type="button" class="radar-chip" data-radar-query="funny animal sound">🐱 Звуки животных</button><button type="button" class="radar-chip" data-radar-query="russian funny shorts">🇷🇺 Русские мемы</button></div>
+</div>
 <div class="panel" id="autoPanel">
 <div class="nav" style="padding:2px 0 14px"><button class="active" id="providerYoutube" type="button">▶ YouTube</button><button id="providerTiktok" type="button">♪ TikTok</button><button id="providerPeerTube" type="button">◉ Другие источники</button></div>
 <div id="providerTip" class="notice">YouTube: поиск вирусных коротких видео с настоящими просмотрами после подключения API-ключа.</div>
@@ -19,7 +52,8 @@
 <div class="hint">Отбор: до 2 минут, признаки речевого мема и подтверждённые просмотры. Порог: 5 000 просмотров либо от 1 000 с темпом от 350 просмотров в день. Скорость просмотров — средняя за время публикации, не реальный тренд роста.</div>
 </div>
 <div class="panel hidden" id="tiktokPanel"><h3>♪ TikTok — мемы с ярким голосом</h3><p class="hint">Открой тренды, выбери ролик с короткой смешной фразой, скопируй ссылку и сохрани здесь. Автоматический импорт TikTok без разрешённого API недоступен.</p><div class="row"><a class="secondary small" href="https://ads.tiktok.com/business/creativecenter/inspiration/popular/pc/en" target="_blank" rel="noopener noreferrer">🔥 Популярные видео ↗</a><a class="secondary small" href="https://ads.tiktok.com/business/creativecenter/trends/hashtag/pc/en" target="_blank" rel="noopener noreferrer"># Хештеги ↗</a><a class="secondary small" href="https://www.tiktok.com/search?q=funny%20voice%20meme" target="_blank" rel="noopener noreferrer">🎙 Голоса ↗</a></div><form id="tiktokQuickForm"><div class="field"><label for="tiktokPaste">Ссылка на конкретное видео TikTok</label><input id="tiktokPaste" type="url" placeholder="https://www.tiktok.com/@user/video/..." required></div><button class="primary" type="submit">Добавить мем →</button></form><p class="hint" id="tiktokHint">TikTok → Поделиться → Копировать ссылку. Затем укажешь название и фразу для ремикса.</p><details><summary>Как выбрать мем для музыки?</summary><p class="hint">Лучше всего подходят 1–5 секунд узнаваемой речи, ритмичный диалог или эмоциональный выкрик. Просмотры TikTok здесь пока не проверяются автоматически.</p></details></div>
-<div class="row between" style="margin:22px 0 12px"><h2>Мемы, прошедшие отбор</h2><span class="sub" id="autoCount"></span></div>
+<div class="row between" style="margin:22px 0 5px"><h2>Мемы, прошедшие отбор</h2><span class="sub" id="autoCount"></span></div>
+<div class="radar-tools"><label for="radarSort">Сортировка</label><select id="radarSort"><option value="score">По потенциалу</option><option value="views">По просмотрам</option><option value="velocity">По средним просмотрам в день</option><option value="new">Сначала новые</option></select><label for="radarMinScore">Потенциал</label><select id="radarMinScore"><option value="0">Все</option><option value="60">60+</option><option value="75">75+</option><option value="90">90+</option></select><button type="button" class="secondary small" id="radarRefresh">↻ Обновить</button><span class="sub" id="radarUpdated"></span></div>
 <div id="autoMessage" class="notice">Проверка популярности запустится автоматически.</div><div id="autoGrid" class="grid"></div>
 <h2 style="margin-top:28px">Другие площадки</h2>
 <div class="panel"><h3>Найти мем в соцсетях</h3><div class="toolbar"><input id="searchPhrase" placeholder="Например: смешной голос, мем интервью"><button class="secondary" id="youtubeSearch">YouTube ↗</button><button class="secondary" id="vkSearch">VK ↗</button><button class="secondary" id="tiktokSearch">TikTok ↗</button></div><div class="hint">Поиск открывается на самой платформе. Данные и просмотры не выдумываются.</div></div>
@@ -56,22 +90,43 @@ for(const [p,id] of [['youtube','providerYoutube'],['tiktok','providerTiktok'],[
 el('tiktokPanel').classList.toggle('hidden',kind!=='tiktok');
 el('autoCategory').disabled=kind==='tiktok';el('autoDays').disabled=kind==='tiktok';el('autoFind').disabled=kind==='tiktok';el('autoQuery').disabled=kind==='tiktok';el('autoReset').disabled=kind==='tiktok';
 el('autoGrid').innerHTML='';el('autoCount').textContent='';autoItems=[];
-if(kind==='tiktok'){el('providerTip').textContent='TikTok — доступ к официальным трендам вручную через Creative Center. Автоматический сбор пока не подключён.';el('autoMessage').textContent='Автоматический поиск TikTok пока не подключён: у сервиса нет разрешённого API-доступа.';return}
+if(kind==='tiktok'){radarUpdateKpis();el('providerTip').textContent='TikTok — доступ к официальным трендам вручную через Creative Center. Автоматический сбор пока не подключён.';el('autoMessage').textContent='Автоматический поиск TikTok пока не подключён: у сервиса нет разрешённого API-доступа.';return}
 el('providerTip').textContent=kind==='youtube'?'YouTube — поиск коротких видео и реальная статистика через официальный API. Нужен серверный API-ключ.':'Дополнительный источник PeerTube — открытый каталог; вирусность оцениваем по известным просмотрам.';
 searchAuto();
 }
+
+const radarEsc=escapeHtml;
+const radarNum=v=>Number(v||0).toLocaleString('ru-RU');
+const radarScore=v=>Math.min(100,Math.max(0,Number(v.remix_score)||0));
+let radarLastCheck=null;
+function radarUpdateKpis(){
+ el('radarFound').textContent=autoLoaded?radarNum(autoItems.length):'—';
+ el('radarHot').textContent=autoLoaded?radarNum(autoItems.filter(v=>radarScore(v)>=75).length):'—';
+ el('radarBest').textContent=autoItems.length?Math.max(...autoItems.map(radarScore))+'/100':'—';
+ el('radarSaved').textContent=radarNum(memes.length);
+ el('radarState').textContent=autoProvider==='tiktok'?'◌ TikTok · ручной импорт':autoBusy?'◌ Идёт поиск':autoLoaded?'● Данные источника':'◌ Источник не подключён';
+ el('radarUpdated').textContent=radarLastCheck?'Проверено '+radarLastCheck.toLocaleTimeString('ru-RU',{hour:'2-digit',minute:'2-digit'}):'';
+}
+function radarFiltered(){
+ const threshold=Number(el('radarMinScore').value||0);
+ const result=autoItems.filter(v=>radarScore(v)>=threshold).slice();
+ const sort=el('radarSort').value;
+ const metric={score:v=>radarScore(v),views:v=>Number(v.views)||0,velocity:v=>Number(v.view_velocity)||0,new:v=>Date.parse(v.published)||0}[sort];
+ return result.sort((a,b)=>metric(b)-metric(a));
+}
 function renderAuto(){
-el('autoCount').textContent=autoItems.length?'Видео: '+autoItems.length:'';
-el('autoGrid').innerHTML=autoItems.map((v,i)=>'<article class="card">'+
-(v.thumbnail?'<div class="thumb"><img loading="lazy" src="'+escapeHtml(v.thumbnail)+'" alt="Превью видеоролика"></div>':'<div class="thumb"><span class="muted">Превью недоступно</span></div>')+
-'<a class="titlelink" target="_blank" rel="noopener noreferrer" href="'+escapeHtml(v.url)+'">'+escapeHtml(v.title)+' ↗</a>'+
-'<div class="hint">'+escapeHtml(v.platform||autoProvider)+' · '+escapeHtml(v.source)+' · '+escapeHtml((v.published||'').slice(0,10))+' · '+escapeHtml(durationLabel(v.duration))+'</div>'+
-'<div class="stats"><span class="tag">👁 '+Number(v.views).toLocaleString('ru-RU')+' просмотров</span><span class="tag">≈ '+Number(v.view_velocity).toLocaleString('ru-RU')+' / день</span><span class="tag">Потенциал: '+v.remix_score+'/100*</span></div>'+
-'<div class="row"><button class="primary small" data-auto-save="'+i+'">Сохранить для ремикса</button><a class="secondary small" href="'+escapeHtml(v.url)+'" target="_blank" rel="noopener noreferrer" style="text-decoration:none">Оригинал ↗</a></div></article>').join('');
+ radarUpdateKpis();
+ const data=radarFiltered();
+ el('autoCount').textContent=autoLoaded?'Показано '+data.length+' из '+autoItems.length:'';
+ el('autoGrid').innerHTML=data.length?data.map((v)=>{const i=autoItems.indexOf(v),id=ytId(v.url),safeUrl=radarEsc(v.url),safeTitle=radarEsc(v.title),canEmbed=!!id;
+ const thumb=v.thumbnail?'<img loading="lazy" src="'+radarEsc(v.thumbnail)+'" alt="Превью ролика">':'<span class="muted">Нет превью</span>';
+ return '<article class="card radar-card"><div class="radar-video"><div class="thumb">'+thumb+'</div>'+(canEmbed?'<button type="button" class="play-overlay" data-radar-play="'+i+'" aria-label="Смотреть видео">▶</button>':'')+'</div><div class="row between" style="align-items:start;flex-wrap:nowrap"><a class="titlelink radar-title" href="'+safeUrl+'" target="_blank" rel="noopener noreferrer">'+safeTitle+'</a><span class="radar-score">'+radarScore(v)+'/100</span></div><div class="hint">'+radarEsc(v.source||v.platform||autoProvider)+' · '+radarEsc((v.published||'').slice(0,10))+' · '+radarEsc(durationLabel(v.duration))+'</div><div class="stats"><span class="tag">👁 '+radarNum(v.views)+'</span><span class="tag">≈ '+radarNum(v.view_velocity)+'/день</span></div><div class="radar-inline hidden" id="radarPlayer'+i+'"></div><div class="row"><button type="button" class="primary small" data-auto-save="'+i+'">＋ Сохранить</button><a class="secondary small" href="'+safeUrl+'" target="_blank" rel="noopener noreferrer" style="text-decoration:none">Оригинал ↗</a></div></article>';
+ }).join(''):'';
+ if(autoLoaded&&data.length===0)el('autoGrid').innerHTML='<div class="radar-empty" style="grid-column:1/-1">По этим фильтрам пока нет роликов. Уменьши порог потенциала или поменяй запрос.</div>';
 }
 async function searchAuto(){
 if(autoBusy||autoProvider==='tiktok')return;
-autoBusy=true;el('autoFind').disabled=true;el('autoMessage').textContent='Получаем настоящие данные из источника...';
+autoBusy=true;el('autoFind').disabled=true;radarUpdateKpis();el('autoMessage').textContent='Получаем настоящие данные из источника...';
 const providerAtStart=autoProvider;
 const params=new URLSearchParams({[providerAtStart==='youtube'?'youtube':'discover']:'1',category:el('autoCategory').value,days:el('autoDays').value});
 const query=el('autoQuery').value.trim();if(query)params.set('q',query);
@@ -87,13 +142,39 @@ if(!res.ok){
  }
  throw new Error(data.error||'HTTP '+res.status);
 }
-autoItems=data.items||[];autoLoaded=true;renderAuto();
+autoItems=Array.isArray(data.items)?data.items.filter(v=>v&&/^https:\/\//.test(v.url||'')):[];autoLoaded=true;radarLastCheck=new Date();renderAuto();
 el('autoMessage').textContent=autoItems.length?
 'Найдено '+autoItems.length+' из '+data.checked+' проверенных видео ('+data.provider+'). Проверено '+new Date(data.updated_at).toLocaleString('ru-RU')+'. *Потенциал оценён по метаданным, звук не анализировался.':
 'Проверено '+data.checked+' видео — ни одно не прошло фильтры популярности и пригодности. Попробуй другой запрос или период.';
 }catch(e){autoItems=[];renderAuto();el('autoMessage').textContent='Источник не ответил: '+e.message+'. Попробуй позже.'}
-finally{autoBusy=false;if(autoProvider!=='tiktok')el('autoFind').disabled=false}
+finally{autoBusy=false;if(autoProvider!=='tiktok')el('autoFind').disabled=false;radarUpdateKpis()}
 }
+
+/* Radar 2.0 user actions */
+function radarDoSearch(query){
+ if(autoProvider==='tiktok'){el('providerYoutube').click();}
+ el('autoQuery').value=query;
+ el('radarQuery').value=query;
+ searchAuto();
+}
+el('radarSearch').onclick=()=>radarDoSearch(el('radarQuery').value.trim());
+el('radarQuery').onkeydown=e=>{if(e.key==='Enter'){e.preventDefault();radarDoSearch(el('radarQuery').value.trim())}};
+document.querySelectorAll('[data-radar-query]').forEach(b=>b.onclick=()=>radarDoSearch(b.dataset.radarQuery));
+el('radarSort').onchange=renderAuto;
+el('radarMinScore').onchange=renderAuto;
+el('radarRefresh').onclick=searchAuto;
+el('autoGrid').addEventListener('click',e=>{
+ const b=e.target.closest('[data-radar-play]');if(!b)return;
+ const index=Number(b.dataset.radarPlay),v=autoItems[index],id=v&&ytId(v.url),place=el('radarPlayer'+index);
+ if(!id||!place)return;
+ if(!place.classList.contains('hidden')){place.innerHTML='';place.classList.add('hidden');return}
+ place.classList.remove('hidden');
+ place.innerHTML='<iframe loading="lazy" allow="accelerometer; autoplay; encrypted-media; picture-in-picture" allowfullscreen referrerpolicy="strict-origin-when-cross-origin" src="https://www.youtube-nocookie.com/embed/'+encodeURIComponent(id)+'?autoplay=1"></iframe>';
+});
+const radarExistingFetch=fetchData;
+fetchData=async function(){await radarExistingFetch();radarUpdateKpis()};
+radarUpdateKpis();
+
 el('tiktokQuickForm').onsubmit=e=>{e.preventDefault();const raw=el('tiktokPaste').value.trim();let u;try{u=new URL(raw)}catch{el('tiktokHint').textContent='Укажи полную ссылку на видео.';return}const h=u.hostname.toLowerCase();if(u.protocol!=='https:'||!(h==='tiktok.com'||h.endsWith('.tiktok.com'))||!(u.pathname.includes('/video/')||h==='vm.tiktok.com'||h==='vt.tiktok.com'||u.pathname.startsWith('/v/'))){el('tiktokHint').textContent='Нужна ссылка именно на ролик TikTok, не на профиль или Creative Center.';return}u.search='';u.hash='';showDialog({title:'TikTok — звуковой мем',original_url:u.toString(),notes:'Источник TikTok. Укажи услышанную фразу и идею нарезки.'})};
 el('providerYoutube').onclick=()=>providerSelect('youtube');
 el('providerTiktok').onclick=()=>providerSelect('tiktok');
