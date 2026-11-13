@@ -10,6 +10,15 @@
 <main id="app" class="hidden">
 <div class="nav" id="nav"><button data-tab="discover" class="active">🔎 Найти мемы</button><button data-tab="saved">💾 Мои мемы</button><button data-tab="studio">🎛️ Ремикс-студия</button><button data-tab="settings">⚙️ Источники</button></div>
 <section id="discover"><div class="hero"><div><h1>Лови мем, пока он свежий</h1><p class="muted">Видео из каналов, которые ты отслеживаешь, и быстрое добавление оригиналов.</p></div><button class="primary" id="addFromFeed">+ Добавить мем</button></div>
+<div class="panel" id="autoPanel">
+<div class="row between"><div><h3>⚡ Автоматический поиск новых видео</h3><p class="hint">Сервис ищет короткие видео с забавными фразами, голосами и ситуациями. Сейчас источник: открытый каталог PeerTube. Это кандидаты для ремиксов, а не гарантированно вирусные хиты.</p></div><span class="pill">Реальные публикации</span></div>
+<div class="toolbar"><select id="autoCategory" aria-label="Тематика"><option value="all">Все смешные видео</option><option value="voice">Голоса и фразы</option><option value="russian">На русском</option><option value="animals">Животные</option></select><select id="autoDays" aria-label="Период"><option value="7">За 7 дней</option><option value="30" selected>За 30 дней</option><option value="90">За 90 дней</option></select><button class="primary" id="autoFind">Искать мемы</button></div>
+<div class="toolbar"><input id="autoQuery" placeholder="Свой запрос: например, funny interview" aria-label="Поисковая фраза"><button class="secondary small" id="autoReset">Сбросить запрос</button></div>
+<div class="hint">Результаты сортируются по пригодности для ремикса (длина, слова в названии, свежесть), не по популярности. Просмотры показываются только если их передал источник.</div>
+</div>
+<div class="row between" style="margin:22px 0 12px"><h2>Найденные кандидаты</h2><span class="sub" id="autoCount"></span></div>
+<div id="autoMessage" class="notice">Поиск загрузится автоматически.</div><div id="autoGrid" class="grid"></div>
+<h2 style="margin-top:28px">Другие площадки</h2>
 <div class="panel"><h3>Найти мем в соцсетях</h3><div class="toolbar"><input id="searchPhrase" placeholder="Например: смешной голос, мем интервью"><button class="secondary" id="youtubeSearch">YouTube ↗</button><button class="secondary" id="vkSearch">VK ↗</button><button class="secondary" id="tiktokSearch">TikTok ↗</button></div><div class="hint">Поиск открывается на самой платформе. Данные и просмотры не выдумываются.</div></div>
 <div class="row between" style="margin:25px 0 14px"><h2>Новые видео из каналов</h2><button class="secondary small" id="refreshFeed">↻ Обновить</button></div><div id="feedMessage" class="notice">Загружаем...</div><div class="grid" id="feedGrid"></div>
 </section>
@@ -35,6 +44,37 @@ function renderStudioSelect(){const prev=el('studioMeme').value;el('studioMeme')
 function renderIdeas(){el('ideasGrid').innerHTML=ideas.map(i=>'<div class="card"><b>'+escapeHtml(i.title)+'</b><div class="stats"><span class="tag">'+escapeHtml(i.genre)+'</span><span class="tag">'+escapeHtml(i.bpm)+' BPM</span></div><div class="hint">'+escapeHtml(i.sample_plan)+'</div><div class="row"><button class="secondary small" data-idea-copy="'+i.id+'">Копировать</button><button class="danger small" data-idea-delete="'+i.id+'">Удалить</button></div></div>').join('')||'<div class="panel empty">Сохранённых идей ещё нет.</div>'}
 async function refreshFeed(){const message=el('feedMessage'),grid=el('feedGrid');grid.innerHTML='';feed=[];if(!sources.length){message.textContent='Добавь YouTube-канал в разделе «Источники», чтобы получать свежие видео. Или добавляй мемы вручную.';return}message.textContent='Получаем реальные публикации из YouTube RSS...';const results=await Promise.all(sources.filter(s=>s.enabled&&s.channel_id).slice(0,15).map(async s=>{try{const r=await fetch('https://ysjupnwvzbnvjtcqlcnb.supabase.co/functions/v1/meme-music?channel='+encodeURIComponent(s.channel_id));const x=await r.json();if(!r.ok)throw Error(x.error||r.status);return (x.items||[]).map(item=>({...item,channel_name:s.name}))}catch(e){return [{error:s.name+': '+e.message}]}}));const errors=results.flat().filter(x=>x.error);feed=results.flat().filter(x=>x.video_id).sort((a,b)=>new Date(b.published)-new Date(a.published)).slice(0,80);message.textContent=feed.length?'Найдено видео: '+feed.length+'. Это последние публикации выбранных каналов, а не рейтинг трендов всего YouTube.':'Новых доступных видео пока нет.';if(errors.length)message.textContent+=' Ошибки источников: '+errors.map(x=>x.error).join('; ');
 grid.innerHTML=feed.map((f,i)=>'<div class="card"><div class="thumb"><img loading="lazy" alt="" src="https://i.ytimg.com/vi/'+encodeURIComponent(f.video_id)+'/hqdefault.jpg"></div><a class="titlelink" href="'+escapeHtml(f.url)+'" target="_blank" rel="noopener noreferrer">'+escapeHtml(f.title)+' ↗</a><div class="hint">'+escapeHtml(f.channel_name)+' · '+escapeHtml((f.published||'').slice(0,10))+'</div><div class="row"><button class="primary small" data-feed-save="'+i+'">Сохранить мем</button><button class="secondary small" data-feed-watch="'+i+'">Смотреть</button></div><div id="player'+i+'"></div></div>').join('')}
+let autoItems=[],autoLoaded=false,autoBusy=false;
+const autoEndpoint='https://ysjupnwvzbnvjtcqlcnb.supabase.co/functions/v1/meme-music';
+function durationLabel(n){if(!n)return 'Длительность неизвестна';return Math.floor(n/60)+':'+String(Math.floor(n%60)).padStart(2,'0')}
+function renderAuto(){
+  el('autoCount').textContent=autoItems.length?'Видео: '+autoItems.length:'';
+  el('autoGrid').innerHTML=autoItems.map((v,i)=>'<article class="card">'+
+  (v.thumbnail?'<div class="thumb"><img loading="lazy" src="'+escapeHtml(v.thumbnail)+'" alt="Превью видеоролика"></div>':'<div class="thumb"><span class="muted">Видеопревью недоступно</span></div>')+
+  '<a class="titlelink" target="_blank" rel="noopener noreferrer" href="'+escapeHtml(v.url)+'">'+escapeHtml(v.title)+' ↗</a>'+
+  '<div class="hint">'+escapeHtml(v.source)+' · '+escapeHtml((v.published||'').slice(0,10))+' · '+escapeHtml(durationLabel(v.duration))+'</div>'+
+  '<div class="stats"><span class="tag">'+(v.views===null?'Просмотры недоступны':'Просмотры: '+Number(v.views).toLocaleString('ru-RU'))+'</span><span class="tag">Идея: '+v.score+' баллов*</span></div>'+
+  '<div class="row"><button class="primary small" data-auto-save="'+i+'">Сохранить для ремикса</button><a class="secondary small" href="'+escapeHtml(v.url)+'" target="_blank" rel="noopener noreferrer" style="text-decoration:none">Смотреть оригинал ↗</a></div></article>').join('');
+}
+async function searchAuto(){
+ if(autoBusy)return;
+ autoBusy=true;const button=el('autoFind');button.disabled=true;el('autoMessage').classList.remove('hidden');
+ el('autoMessage').textContent='Ищем реальные видео. Это может занять несколько секунд...';
+ const params=new URLSearchParams({discover:'1',category:el('autoCategory').value,days:el('autoDays').value});
+ const q=el('autoQuery').value.trim();if(q)params.set('q',q);
+ try{
+  const r=await fetch(autoEndpoint+'?'+params.toString(),{signal:AbortSignal.timeout(30000)});
+  const data=await r.json();if(!r.ok)throw new Error(data.error||'HTTP '+r.status);
+  autoItems=data.items||[];autoLoaded=true;renderAuto();
+  el('autoMessage').textContent=autoItems.length?'Найдены реальные видео PeerTube · проверено '+new Date(data.updated_at).toLocaleString('ru-RU')+'. *Баллы — эвристика пригодности звука для ремикса, не рейтинг вирусности.'+(data.warning?' '+data.warning:''):'За выбранный период видео не найдены. Попробуй 90 дней или другой запрос.';
+ }catch(e){autoItems=[];renderAuto();el('autoMessage').textContent='Не удалось загрузить новые видео: '+e.message+'. Попробуй обновить позже или используй поиск ниже.';}
+ finally{autoBusy=false;button.disabled=false}
+}
+el('autoFind').onclick=searchAuto;
+el('autoReset').onclick=()=>{el('autoQuery').value='';searchAuto()};
+el('autoCategory').onchange=searchAuto;el('autoDays').onchange=searchAuto;
+el('autoQuery').onkeydown=e=>{if(e.key==='Enter'){e.preventDefault();searchAuto()}};
+el('autoGrid').onclick=e=>{const b=e.target.closest('button[data-auto-save]');if(!b)return;const v=autoItems[Number(b.dataset.autoSave)];if(v)showDialog({title:v.title,original_url:v.url,notes:'Источник: '+v.source+'\nПросмотры на момент поиска: '+(v.views??'нет данных')+'\nКандидат для музыкальной переделки. Уточнить голосовую фразу после просмотра.'})};
 function showTab(id){for(let section of ['discover','saved','studio','settings'])el(section).classList.toggle('hidden',section!==id);document.querySelectorAll('#nav button').forEach(b=>b.classList.toggle('active',b.dataset.tab===id))}
 function showDialog(m={}){el('editId').value=m.id||'';el('dialogTitle').textContent=m.id?'Изменить мем':'Сохранить мем';el('mTitle').value=m.title||'';el('mUrl').value=m.original_url||'';el('mPhrase').value=m.phrase||'';el('mNotes').value=m.notes||'';el('mStatus').value=m.status||'found';el('memeDialog').showModal()}
 async function saveMeme(e){e.preventDefault();const id=el('editId').value,url=el('mUrl').value.trim(),data={title:el('mTitle').value.trim(),original_url:url,phrase:el('mPhrase').value.trim(),notes:el('mNotes').value.trim(),status:el('mStatus').value,source:getPlatform(url),video_id:ytId(url)};const r=id?await supabase.from('memes').update(data).eq('id',id):await supabase.from('memes').insert({...data,user_id:user.id});if(r.error)return notify(r.error.message,true);el('memeDialog').close();notify('Мем сохранён');await fetchData()}
@@ -44,7 +84,7 @@ const copy=s=>navigator.clipboard.writeText(s).then(()=>notify('Скопиров
 el('authForm').onsubmit=async e=>{e.preventDefault();const {error}=await supabase.auth.signInWithPassword({email:el('email').value,password:el('password').value});if(error)notify(error.message,true)};
 el('signUp').onclick=async()=>{if(!el('authForm').reportValidity()){notify('Сначала укажи действующий email и пароль не короче 6 символов.',true);return;}const email=el('email').value.trim(),password=el('password').value;if(!email||password.length<6){notify('Нужны email и пароль не короче 6 символов.',true);return;}el('signUp').disabled=true;try{const {error,data}=await supabase.auth.signUp({email,password});if(error)notify(error.message,true);else notify(data.session?'Аккаунт создан, вход выполнен':'Регистрация отправлена. Проверь почту и подтверди email, затем войди.');}finally{el('signUp').disabled=false}};
 el('logout').onclick=()=>supabase.auth.signOut();
-supabase.auth.onAuthStateChange((event,session)=>{user=session?.user||null;el('auth').classList.toggle('hidden',!!user);el('app').classList.toggle('hidden',!user);el('logout').classList.toggle('hidden',!user);el('connection').textContent=user?'Вход выполнен':'Нужен вход';if(user)queueMicrotask(()=>fetchData());else{memes=[];sources=[];ideas=[]}});
+supabase.auth.onAuthStateChange((event,session)=>{user=session?.user||null;el('auth').classList.toggle('hidden',!!user);el('app').classList.toggle('hidden',!user);el('logout').classList.toggle('hidden',!user);el('connection').textContent=user?'Вход выполнен':'Нужен вход';if(user)queueMicrotask(()=>{fetchData();if(!autoLoaded)searchAuto()});else{memes=[];sources=[];ideas=[]}});
 el('nav').onclick=e=>{const b=e.target.closest('button[data-tab]');if(b)showTab(b.dataset.tab)};
 for(let id of ['addFromFeed','addSaved'])el(id).onclick=()=>showDialog();
 el('closeDialog').onclick=()=>el('memeDialog').close();el('memeForm').onsubmit=saveMeme;
