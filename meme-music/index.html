@@ -152,7 +152,7 @@ finally{autoBusy=false;if(autoProvider!=='tiktok')el('autoFind').disabled=false;
 
 /* Radar 2.0 user actions */
 function radarDoSearch(query){
- if(autoProvider==='tiktok'){el('providerYoutube').click();}
+ if(autoProvider==='tiktok'){el('autoQuery').value=query;el('radarQuery').value=query;providerSelect('youtube');return;}
  el('autoQuery').value=query;
  el('radarQuery').value=query;
  searchAuto();
