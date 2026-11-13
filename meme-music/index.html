@@ -74,6 +74,7 @@ el('autoFind').onclick=searchAuto;
 el('autoReset').onclick=()=>{el('autoQuery').value='';searchAuto()};
 el('autoCategory').onchange=searchAuto;el('autoDays').onchange=searchAuto;
 el('autoQuery').onkeydown=e=>{if(e.key==='Enter'){e.preventDefault();searchAuto()}};
+window.setInterval(()=>{if(user&&!el('discover').classList.contains('hidden'))searchAuto()},15*60*1000);
 el('autoGrid').onclick=e=>{const b=e.target.closest('button[data-auto-save]');if(!b)return;const v=autoItems[Number(b.dataset.autoSave)];if(v)showDialog({title:v.title,original_url:v.url,notes:'Источник: '+v.source+'\nПросмотры на момент поиска: '+(v.views??'нет данных')+'\nКандидат для музыкальной переделки. Уточнить голосовую фразу после просмотра.'})};
 function showTab(id){for(let section of ['discover','saved','studio','settings'])el(section).classList.toggle('hidden',section!==id);document.querySelectorAll('#nav button').forEach(b=>b.classList.toggle('active',b.dataset.tab===id))}
 function showDialog(m={}){el('editId').value=m.id||'';el('dialogTitle').textContent=m.id?'Изменить мем':'Сохранить мем';el('mTitle').value=m.title||'';el('mUrl').value=m.original_url||'';el('mPhrase').value=m.phrase||'';el('mNotes').value=m.notes||'';el('mStatus').value=m.status||'found';el('memeDialog').showModal()}
