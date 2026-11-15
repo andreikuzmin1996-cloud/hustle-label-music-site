@@ -14,7 +14,7 @@ jobs:
         run: |
           mkdir -p prepared
           curl -fL --retry 4 -A 'Mozilla/5.0' --connect-timeout 20 --max-time 240 \
-          'https://upload.wikimedia.org/wikipedia/commons/4/4c/Night_of_the_Living_Dead_%281_of_10%29_Movie_CLIP_-_They%27re_Coming_to_Get_You_%281968%29_HD.webm' -o scene.webm
+          'https://upload.wikimedia.org/wikipedia/commons/f/fe/Night_of_the_Living_Dead_%281_of_10%29_Movie_CLIP_-_They%27re_Coming_to_Get_You_%281968%29_HD.webm' -o scene.webm
           ffprobe -v error -show_entries format=duration -of default=noprint_wrappers=1 scene.webm
       - name: Produce Zenuro-ready MP4
         run: |
