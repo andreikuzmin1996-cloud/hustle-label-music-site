@@ -1,0 +1,37 @@
+name: Kinomoment Studio backend smoke test
+on:
+  push:
+    paths:
+      - "kinomoment-studio-server/**"
+      - ".github/workflows/kinomoment-ci.yml"
+  workflow_dispatch:
+jobs:
+  smoke:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - run: sudo apt-get update && sudo apt-get install -y ffmpeg fonts-dejavu-core
+      - run: pip install -r kinomoment-studio-server/requirements.txt
+      - name: Compile and import
+        run: |
+          python -m py_compile kinomoment-studio-server/app.py
+          cd kinomoment-studio-server && python -c "import app; print(app.health())"
+      - name: Render a 20s synthetic clip
+        run: |
+          cd kinomoment-studio-server
+          ffmpeg -y -f lavfi -i "color=c=blue:size=640x360:rate=12" -f lavfi -i "sine=frequency=440:sample_rate=22050" -t 23 -c:v libx264 -preset ultrafast -pix_fmt yuv420p -c:a aac /tmp/kinomoment-smoke.mp4
+          python - <<'PY'
+          from pathlib import Path
+          import shutil
+          import app
+          app.GROQ_API_KEY = ""
+          j=app.new_job({"count":1,"mode":"blur","captions":True})
+          app.process(j,Path("/tmp/kinomoment-smoke.mp4"))
+          print("stage",j["stage"],"error",j["error"],"files",j["files"])
+          assert j["stage"]=="ready",str(j["error"])
+          assert (Path(j["folder"])/"kinomoment_01.mp4").is_file()
+          shutil.rmtree(j["folder"],ignore_errors=True)
+          PY
