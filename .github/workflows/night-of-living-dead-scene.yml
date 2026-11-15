@@ -1,0 +1,27 @@
+name: Night of Living Dead scene for Kinomoment
+on:
+  push:
+    paths: [".github/workflows/night-of-living-dead-scene.yml"]
+permissions:
+  contents: read
+jobs:
+  scene:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - run: sudo apt-get update -qq && sudo apt-get install -y -qq ffmpeg
+      - name: Download original public-domain film scene
+        run: |
+          mkdir -p prepared
+          curl -fL --retry 4 -A 'Mozilla/5.0' --connect-timeout 20 --max-time 240 \
+          'https://upload.wikimedia.org/wikipedia/commons/4/4c/Night_of_the_Living_Dead_%281_of_10%29_Movie_CLIP_-_They%27re_Coming_to_Get_You_%281968%29_HD.webm' -o scene.webm
+          ffprobe -v error -show_entries format=duration -of default=noprint_wrappers=1 scene.webm
+      - name: Produce Zenuro-ready MP4
+        run: |
+          ffmpeg -y -hide_banner -loglevel error -i scene.webm -t 00:03:24 -vf 'scale=1280:-2' -c:v libx264 -preset veryfast -crf 24 -pix_fmt yuv420p -c:a aac -b:a 128k -movflags +faststart prepared/night_of_the_living_dead_cemetery_3m24.mp4
+          printf 'Night of the Living Dead (1968): graveyard scare, attack. Source: Wikimedia Commons, public-domain in US; rights may differ by country.\n' > prepared/README.txt
+      - uses: actions/upload-artifact@v4
+        with:
+          name: kinomoment-night-of-living-dead-cemetery
+          path: prepared/
+          retention-days: 7
