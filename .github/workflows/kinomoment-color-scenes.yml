@@ -1,0 +1,49 @@
+name: Color cinema with dialogue - prepare MP4 scenes
+on:
+  push:
+    paths:
+      - ".github/workflows/kinomoment-color-scenes.yml"
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  cut:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - run: sudo apt-get update -qq && sudo apt-get install -y -qq ffmpeg
+      - name: Fetch fully licensed modern film Payload (2012)
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p selected
+          curl -fL --retry 4 --retry-delay 3 --connect-timeout 25 --max-time 360 -A "Mozilla/5.0" \
+            'https://upload.wikimedia.org/wikipedia/commons/4/4a/Payload.webm' -o payload.webm
+          ffprobe -v error -show_entries format=duration:stream=codec_type,codec_name,width,height -of json payload.webm
+          test "$(stat -c%s payload.webm)" -gt 10000000
+      - name: Export 4 coherent 2-3 min colour scenes preserving original dialogue
+        shell: bash
+        run: |
+          set -euo pipefail
+          ffmpeg -y -hide_banner -loglevel error -ss 00:01:00 -i payload.webm -t 00:02:50 -vf 'scale=1280:720' -c:v libx264 -preset veryfast -crf 24 -pix_fmt yuv420p -c:a aac -b:a 128k -movflags +faststart selected/01_Payload_01m00-03m50.mp4
+          ffmpeg -y -hide_banner -loglevel error -ss 00:05:30 -i payload.webm -t 00:02:50 -vf 'scale=1280:720' -c:v libx264 -preset veryfast -crf 24 -pix_fmt yuv420p -c:a aac -b:a 128k -movflags +faststart selected/02_Payload_05m30-08m20.mp4
+          ffmpeg -y -hide_banner -loglevel error -ss 00:10:15 -i payload.webm -t 00:02:50 -vf 'scale=1280:720' -c:v libx264 -preset veryfast -crf 24 -pix_fmt yuv420p -c:a aac -b:a 128k -movflags +faststart selected/03_Payload_10m15-13m05.mp4
+          ffmpeg -y -hide_banner -loglevel error -ss 00:14:05 -i payload.webm -t 00:02:50 -vf 'scale=1280:720' -c:v libx264 -preset veryfast -crf 24 -pix_fmt yuv420p -c:a aac -b:a 128k -movflags +faststart selected/04_Payload_14m05-16m55.mp4
+          for clip in selected/*.mp4; do
+            echo "CHECK $clip"
+            ffprobe -v error -show_entries format=duration:stream=codec_type,codec_name,width,height -of json "$clip"
+            test "$(stat -c%s "$clip")" -gt 1000000
+          done
+          cat > selected/SOURCE_AND_LICENSE.txt <<'EOF'
+          Фильм: Payload (2012), цветной художественный научно-фантастический фильм с живыми актёрами и оригинальным звуком.
+          Автор: Stu Willis. Источник: https://commons.wikimedia.org/wiki/File:Payload.webm
+          Лицензия: Creative Commons Attribution-ShareAlike 3.0 Unported (CC BY-SA 3.0)
+          https://creativecommons.org/licenses/by-sa/3.0/
+          При публикации укажи автора, ссылку на оригинал, лицензию, укажи изменения; адаптацию распространяй на условиях совместимой лицензии.
+          Четыре интервала — предварительно выделенные последовательные эпизоды. Не являются подтверждёнными лучшими моментами до просмотра сюжета.
+          EOF
+      - uses: actions/upload-artifact@v4
+        with:
+          name: kinomoment-payload-color-film-four-scenes
+          path: selected/
+          retention-days: 7
