@@ -1,0 +1,17 @@
+services:
+  - type: web
+    name: kinomoment-studio
+    runtime: docker
+    dockerfilePath: ./kinomoment-studio-server/Dockerfile
+    dockerContext: ./kinomoment-studio-server
+    plan: starter
+    healthCheckPath: /health
+    envVars:
+      - key: STUDIO_PASSWORD
+        sync: false
+      - key: GROQ_API_KEY
+        sync: false
+      - key: MAX_UPLOAD_MB
+        value: "1200"
+      - key: MAX_VIDEO_MINUTES
+        value: "150"
