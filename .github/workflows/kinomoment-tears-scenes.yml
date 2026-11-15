@@ -1,0 +1,42 @@
+name: Tears of Steel colour live action excerpts
+on:
+  push:
+    paths: [".github/workflows/kinomoment-tears-scenes.yml"]
+permissions:
+  contents: read
+jobs:
+  cut:
+    runs-on: ubuntu-latest
+    timeout-minutes: 23
+    steps:
+      - run: sudo apt-get update -qq && sudo apt-get install -y -qq ffmpeg
+      - name: Download accessible 720p color film with English dialogue
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p selected
+          curl -fL --retry 4 --retry-delay 3 --connect-timeout 25 --max-time 330 -A 'Mozilla/5.0' \
+            'https://upload.wikimedia.org/wikipedia/commons/transcoded/c/cb/Tears_of_Steel_1080p.webm/Tears_of_Steel_1080p.webm.720p.vp9.webm' -o movie.webm
+          test "$(stat -c%s movie.webm)" -gt 10000000
+          ffprobe -v error -show_entries format=duration:stream=codec_type,codec_name,width,height -of json movie.webm
+      - name: Export three full 2-3 minute sequences with original sound
+        shell: bash
+        run: |
+          set -euo pipefail
+          ffmpeg -y -hide_banner -loglevel error -ss 00:00:40 -i movie.webm -t 00:02:30 -c:v libx264 -preset veryfast -crf 24 -pix_fmt yuv420p -c:a aac -b:a 128k -movflags +faststart selected/01_Tears_of_Steel_00m40-03m10.mp4
+          ffmpeg -y -hide_banner -loglevel error -ss 00:04:10 -i movie.webm -t 00:02:30 -c:v libx264 -preset veryfast -crf 24 -pix_fmt yuv420p -c:a aac -b:a 128k -movflags +faststart selected/02_Tears_of_Steel_04m10-06m40.mp4
+          ffmpeg -y -hide_banner -loglevel error -ss 00:08:15 -i movie.webm -t 00:02:30 -c:v libx264 -preset veryfast -crf 24 -pix_fmt yuv420p -c:a aac -b:a 128k -movflags +faststart selected/03_Tears_of_Steel_08m15-10m45.mp4
+          ffprobe -v error -show_entries stream=codec_type,codec_name -of json selected/03_Tears_of_Steel_08m15-10m45.mp4
+          cat > selected/SOURCE_AND_LICENSE.txt <<'EOF'
+          Tears of Steel (2012): science-fiction live-action short film with color and spoken English audio.
+          (CC) Blender Foundation | https://mango.blender.org/
+          Source https://commons.wikimedia.org/wiki/File:Tears_of_Steel_1080p.webm
+          CC BY 3.0 https://creativecommons.org/licenses/by/3.0/
+          Attribution required with indication of edits.
+          Candidate excerpts only. The intervals have not yet been verified as the strongest story beats.
+          EOF
+      - uses: actions/upload-artifact@v4
+        with:
+          name: kinomoment-tears-of-steel-color-film-three-scenes
+          path: selected/
+          retention-days: 7
