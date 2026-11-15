@@ -1,0 +1,35 @@
+name: Public domain film clips
+on:
+  push:
+    paths: [".github/workflows/public-domain-film-clips.yml"]
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  clips:
+    runs-on: ubuntu-latest
+    timeout-minutes: 22
+    steps:
+      - name: Install tools
+        run: sudo apt-get update -qq && sudo apt-get install -y -qq ffmpeg
+      - name: Download licensed film from Wikimedia Commons
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p movie_clips
+          curl -fL --retry 3 --connect-timeout 20 --max-time 300 -A "Mozilla/5.0 (KINOMOMENT short film editing contact)"             'https://upload.wikimedia.org/wikipedia/commons/f/f9/Convict_13_%281920%29.webm'             -o source.webm
+          test $(stat -c%s source.webm) -gt 1000000
+          ffprobe -v error -show_entries format=duration -of default=noprint_wrappers=1 source.webm
+      - name: Cut three coherent 2-3 minute sequences
+        shell: bash
+        run: |
+          set -euo pipefail
+          ffmpeg -y -hide_banner -loglevel error -ss 00:02:00 -i source.webm -t 00:02:30 -c:v libx264 -preset veryfast -crf 25 -pix_fmt yuv420p -c:a aac -b:a 96k -movflags +faststart movie_clips/01_convict13_02m00_04m30.mp4
+          ffmpeg -y -hide_banner -loglevel error -ss 00:10:00 -i source.webm -t 00:02:30 -c:v libx264 -preset veryfast -crf 25 -pix_fmt yuv420p -c:a aac -b:a 96k -movflags +faststart movie_clips/02_convict13_10m00_12m30.mp4
+          ffmpeg -y -hide_banner -loglevel error -ss 00:18:00 -i source.webm -t 00:02:30 -c:v libx264 -preset veryfast -crf 25 -pix_fmt yuv420p -c:a aac -b:a 96k -movflags +faststart movie_clips/03_convict13_18m00_20m30.mp4
+          printf 'Source: Convict 13 (1920), Wikimedia Commons, US public domain.\nChosen intervals are preliminary, not verified best scenes.\n' > movie_clips/README.txt
+      - uses: actions/upload-artifact@v4
+        with:
+          name: kinomoment-convict13-three-clips
+          path: movie_clips/
+          retention-days: 7
